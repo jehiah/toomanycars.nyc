@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <title>🚫🚗.nyc</title>
+    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div id="container">
+
+<div id="numbers">
+<p class="heading">How Many Parking Spaces in NYC?</p>
+<div class="numbers">
+  {{with $count := (printf "%d" .ParkingSpaces | tokenString) }}
+  {{range $index, $char := $count }}
+  <span class="number"><span class="top">{{$char}}</span><span class="bottom">{{$char}}</span></span>
+  {{end}}
+  {{end}}
+</div>
+<p class="subtitle">Still too many!</p>
+
+</div>
+</div>
+</body>
+</html>
