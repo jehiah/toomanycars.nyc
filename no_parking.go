@@ -6,10 +6,13 @@ import (
 	"html/template"
 	"log"
 	"os"
+
+	parkingdata "github.com/jehiah/🚫🚗.nyc/data"
 )
 
 type Data struct {
 	ParkingSpaces int
+	Changes       parkingdata.Changes
 }
 
 func tokenString(s string) []string {
@@ -36,7 +39,19 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = t.ExecuteTemplate(w, "index.html", Data{3000000})
+	f, err := os.Open("data/parking_spaces.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	changes, err := parkingdata.Parse(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = t.ExecuteTemplate(w, "index.html", Data{
+		ParkingSpaces: changes.ProjectedTotal(3000000),
+		Changes:       changes,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

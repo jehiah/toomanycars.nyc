@@ -1,10 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>🚫🚗.nyc</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -13,15 +14,29 @@
 <div id="numbers">
 <p class="heading">How Many Parking Spaces in NYC?</p>
 <div class="numbers">
-  {{with $count := (printf "%d" .ParkingSpaces | tokenString) }}
+  {{with $count := (printf "%d" .ParkingSpaces | tokenString) -}}
   {{range $index, $char := $count }}
   <span class="number"><span class="top">{{$char}}</span><span class="bottom">{{$char}}</span></span>
   {{end}}
-  {{end}}
+  {{- end}}
 </div>
 <p class="subtitle">Still too many!</p>
-
 </div>
+
+<table class="table table-sm table-dark col-xl-8 offset-xl-2" >
+<tbody>
+{{range .Changes}}
+<tr>
+  <td>{{ if .Future }}<i>Planned</i>{{else}}{{.EffectiveDate.Format "Feb 2006"}}{{ end}}</td>
+  <td><strong {{if gt .Spaces 0}}class="more-parking"{{end}}>{{if gt .Spaces 0}}+{{end}}{{.Spaces}}</strong> {{.Category}} spaces</td>
+  <td>{{.Name}}</td>
+  <td>{{if .ReferenceURL}}<a href="{{.ReferenceURL}}">{{.Source}}</a>{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+</table>
+
+
 </div>
 </body>
 </html>

@@ -191,3 +191,9 @@ body {
     font-size:20pt;
     font-family:Helvetica;
 }
+.table {
+    color:#aaa;
+}
+.more-parking {
+    color:#f00;
+}
