@@ -11,8 +11,20 @@ import (
 )
 
 type Data struct {
-	ParkingSpaces int
-	Changes       parkingdata.Changes
+	InitialParkingSpaces int
+	CurbParking          parkingdata.Changes
+	DCA                  parkingdata.DCALicenses
+}
+
+func (d Data) RecentChanges() parkingdata.Changes {
+	var o parkingdata.Changes
+	o = d.CurbParking
+	o = append(o, d.DCA.RecentChanges()...)
+	return o
+}
+
+func (d Data) ParkingSpaces() int {
+	return d.InitialParkingSpaces + d.CurbParking.DeltaSpaces() + d.DCA.Spaces()
 }
 
 func tokenString(s string) []string {
@@ -34,23 +46,26 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	curbParking, err := parkingdata.ParseCurbChangesFromFile("data/curb_changes.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	dca, err := parkingdata.ParseDCAFromFile("data/dca_licenses.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("DOT changes %d", curbParking.DeltaSpaces())
+	log.Printf("DCA managed spaces %d", dca.Spaces())
+
 	w, err := os.Create("www/index.html")
 	defer w.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	f, err := os.Open("data/parking_spaces.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-	changes, err := parkingdata.Parse(f)
-	if err != nil {
-		log.Fatal(err)
-	}
 	err = t.ExecuteTemplate(w, "index.html", Data{
-		ParkingSpaces: changes.ProjectedTotal(3000000),
-		Changes:       changes,
+		InitialParkingSpaces: 3000000 - 600000,
+		CurbParking:          curbParking,
+		DCA:                  dca,
 	})
 	if err != nil {
 		log.Fatal(err)

@@ -23,18 +23,43 @@
 <p class="subtitle">Still too many!</p>
 </div>
 
-<table class="table table-sm table-dark col-xl-8 offset-xl-2" >
+
+<div class="row">
+<div class="col-sm-2 offset-sm-2 parking-subtotal">
+ <strong>{{.DCA.Spaces}}</strong> <br/>
+ <small>Parking Grage / Lot</small>
+</div>
+<div class="col-sm-2 parking-subtotal">
+ <strong>????</strong> <br/>
+ <small>Curbside Parking</small>
+</div>
+<div class="col-sm-2 parking-subtotal">
+ <strong>????</strong> <br/>
+ <small>Parking Lot</small>
+</div>
+<div class="col-sm-2 parking-subtotal">
+ <strong>????</strong> <br/>
+ <small>Driveways</small>
+</div>
+
+
+</div>
+
+<div class="row">
+<table class="table table-sm table-dark col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 recent-changes" >
 <tbody>
-{{range .Changes}}
+{{range .RecentChanges}}
 <tr>
   <td>{{ if .Future }}<i>Planned</i>{{else}}{{.EffectiveDate.Format "Feb 2006"}}{{ end}}</td>
-  <td><strong {{if gt .Spaces 0}}class="more-parking"{{end}}>{{if gt .Spaces 0}}+{{end}}{{.Spaces}}</strong> {{.Category}} spaces</td>
+  <td><strong class="{{if gt .Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt .Spaces 0}}+{{end}}{{.Spaces}}</strong> {{.Category}} spaces</td>
   <td>{{.Name}}</td>
-  <td>{{if .ReferenceURL}}<a href="{{.ReferenceURL}}">{{.Source}}</a>{{end}}</td>
+  <td>{{.Borough}}</td>
+  <td>{{if .ReferenceURL}}<a href="{{.ReferenceURL}}">{{.Source}}</a>{{else}}{{.Source}}{{end}}</td>
 </tr>
 {{end}}
 </tbody>
 </table>
+</div>
 
 
 </div>

@@ -21,7 +21,16 @@ Parking meter block faces
 
 https://data.cityofnewyork.us/Business/License-Revocations-Suspensions-Surrenders-and-Rei/rpeq-j89e/data
     DCA License revocation, etc
-        industry in [Garage, Parking Lot]
+        industry in [Garage, Parking Lot, Garage and Parking Lot]
 
 DCA License Check
     https://a858-elpaca.nyc.gov/CitizenAccess/
+
+https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh/data
+DCA Legally Operating Businesses (updated regularly)
+    > Garage and Parking Lot
+    > Garage
+    > Parking Lot
+        > Detail Column
+    
+    LicenseNumber,LicenseCreationDate,LicenseExpireDate,Industry,BusinessName,BusinessName2,AddressBuilding,AddressStreetName,AddressBorough,Detail

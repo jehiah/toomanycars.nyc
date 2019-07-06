@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"os"
 	"strconv"
 	"time"
 )
@@ -25,14 +26,23 @@ func (c Change) Future() bool {
 
 type Changes []Change
 
-func (c Changes) ProjectedTotal(start int) int {
+func (c Changes) DeltaSpaces() (spaces int) {
 	for _, r := range c {
-		start += r.Spaces
+		spaces += r.Spaces
 	}
-	return start
+	return
 }
 
-func Parse(r io.Reader) (Changes, error) {
+func ParseCurbChangesFromFile(file string) (Changes, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return ParseCurbChanges(f)
+}
+
+func ParseCurbChanges(r io.Reader) (Changes, error) {
 	records, err := csv.NewReader(r).ReadAll()
 	if err != nil {
 		return nil, err
