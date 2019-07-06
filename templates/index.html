@@ -50,15 +50,21 @@
 <tbody>
 {{range .RecentChanges}}
 <tr>
-  <td>{{ if .Future }}<i>Planned</i>{{else}}{{.EffectiveDate.Format "Feb 2006"}}{{ end}}</td>
+  <td>{{ if .Future }}<i>Planned</i> <small>({{.EffectiveDate.Format "01/02/2006"}})</small>{{else}}{{.EffectiveDate.Format "Jan 01 2006"}}{{ end}}</td>
   <td><strong class="{{if gt .Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt .Spaces 0}}+{{end}}{{.Spaces}}</strong> {{.Category}} spaces</td>
-  <td>{{.Name}}</td>
+  <td>{{.Name}}{{if .Description}}<br/>{{.Description}}{{end}}</td>
   <td>{{.Borough}}</td>
   <td>{{if .ReferenceURL}}<a href="{{.ReferenceURL}}">{{.Source}}</a>{{else}}{{.Source}}{{end}}</td>
 </tr>
 {{end}}
 </tbody>
 </table>
+</div>
+
+
+<div class="row">
+<p>Parking Garage and Parking Lot Data sourced from Department of Consumer Affairs (DCA) via NYC Open Data <a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally Operating Businesses</a>.
+
 </div>
 
 

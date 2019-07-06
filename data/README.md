@@ -11,7 +11,6 @@ https://data.cityofnewyork.us/Transportation/Municipal-Parking-Facilities-Manhat
     > updated September 10, 2018
 
 
-
 --
 
 https://data.cityofnewyork.us/Transportation/Parking-Meters-ParkNYC-Blockfaces/s7zi-dgdx
@@ -34,3 +33,6 @@ DCA Legally Operating Businesses (updated regularly)
         > Detail Column
     
     LicenseNumber,LicenseCreationDate,LicenseExpireDate,Industry,BusinessName,BusinessName2,AddressBuilding,AddressStreetName,AddressBorough,Detail
+    
+
+Maps https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d

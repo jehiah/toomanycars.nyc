@@ -25,6 +25,10 @@ type DCALicense struct {
 	Detail            string `json:"detail_2"` // "Vehicle Spaces: %d, Bicycle Spaces: %d"
 }
 
+func (d DCALicense) addressKey() string {
+	return fmt.Sprintf("%s %s %s", d.AddressBuilding, d.AddressStreetName, d.Borough)
+}
+
 func (d DCALicense) Change() Change {
 	dt := d.Creation
 	s := d.Spaces()
@@ -41,7 +45,8 @@ func (d DCALicense) Change() Change {
 		Spaces:        s,
 		Borough:       d.Borough,
 		Category:      d.Industry,
-		Name:          fmt.Sprintf("%s %s %s", n, d.AddressBuilding, d.AddressStreetName),
+		Name:          n,
+		Description:   fmt.Sprintf("%s %s", d.AddressBuilding, d.AddressStreetName),
 		Source:        fmt.Sprintf("DCA License %s", d.LicenseNumber),
 	}
 }
@@ -62,12 +67,12 @@ func (d *DCALicense) UnmarshalJSON(b []byte) error {
 		d = &DCALicense{}
 	}
 	*d = DCALicense(data.localLicense)
-	d.Creation, err = time.Parse("2006-01-02T03:04:05.000", data.CreationStr)
+	d.Creation, err = time.Parse("2006-01-02T03:04:05", data.CreationStr)
 	if err != nil {
 		return err
 	}
 	if data.ExpirationStr != "" {
-		d.Expiration, err = time.Parse("2006-01-02T03:04:05.000", data.ExpirationStr)
+		d.Expiration, err = time.Parse("2006-01-02T03:04:05", data.ExpirationStr)
 		if err != nil {
 			return err
 		}
@@ -110,8 +115,9 @@ func ParseDCAFromFile(file string) (DCALicenses, error) {
 }
 
 func (d DCALicenses) Spaces() (spaces int) {
+	now := time.Now()
 	for _, dd := range d {
-		if dd.LicenseStatus != "Active" {
+		if dd.LicenseStatus == "Inactive" && dd.Expiration.Before(now) {
 			continue
 		}
 		spaces += dd.Spaces()
@@ -119,16 +125,51 @@ func (d DCALicenses) Spaces() (spaces int) {
 	return
 }
 func (d DCALicenses) RecentChanges() Changes {
+	// build a list of most recent address start / end
+	recentExpired := make(map[string]DCALicense)
+	recentNew := make(map[string]DCALicense)
+	for _, dd := range d {
+		addr := dd.addressKey()
+		switch dd.LicenseStatus {
+		case "Active":
+			if c, ok := recentNew[addr]; !ok || c.Creation.Before(dd.Creation) {
+				recentNew[addr] = dd
+			}
+		case "Inactive":
+			if c, ok := recentExpired[addr]; !ok || c.Expiration.Before(dd.Expiration) {
+				recentExpired[addr] = dd
+			}
+		}
+	}
+
 	var o Changes
 	cutoff := time.Now().AddDate(0, -12, 0)
 	for _, dd := range d {
 		switch dd.LicenseStatus {
-		case "Active":
-			if dd.Creation.After(cutoff) {
+		case "Inactive":
+			if dd.Expiration.After(time.Now()) {
+				// consider it as still activ
+				continue
+			}
+			if dd.Expiration.Before(cutoff) {
+				continue
+			}
+			// expired w/ a more recent expired is skipped
+			if e, ok := recentExpired[dd.addressKey()]; ok && dd.Expiration.Before(e.Expiration) {
+				continue
+			}
+			// "expired" w/ a later start at that address is skipped
+			if _, ok := recentNew[dd.addressKey()]; !ok {
 				o = append(o, dd.Change())
 			}
-		case "Inactive":
-			if dd.Expiration.After(cutoff) {
+		case "Active":
+			if dd.Creation.Before(cutoff) {
+				continue
+			}
+			// "new" w/ a previous entry at that address isn't an increase (unless space count changes)
+			if _, ok := recentExpired[dd.addressKey()]; ok {
+				// TODO: if e.Space() != dd.Space()
+			} else {
 				o = append(o, dd.Change())
 			}
 		}

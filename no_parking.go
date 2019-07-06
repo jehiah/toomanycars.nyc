@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"sort"
 
 	parkingdata "github.com/jehiah/🚫🚗.nyc/data"
 )
@@ -20,6 +21,8 @@ func (d Data) RecentChanges() parkingdata.Changes {
 	var o parkingdata.Changes
 	o = d.CurbParking
 	o = append(o, d.DCA.RecentChanges()...)
+	sort.Slice(o, func(i, j int) bool { return o[i].EffectiveDate.After(o[j].EffectiveDate) })
+
 	return o
 }
 
