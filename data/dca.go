@@ -125,6 +125,12 @@ func (d DCALicenses) Spaces() (spaces int) {
 	return
 }
 func (d DCALicenses) RecentChanges() Changes {
+	// build skip list
+	skip := make(map[string]bool)
+	for _, e := range replacedLicenses {
+		skip[e.ReplacesLicense] = true
+	}
+
 	// build a list of most recent address start / end
 	recentExpired := make(map[string]DCALicense)
 	recentNew := make(map[string]DCALicense)
@@ -145,6 +151,9 @@ func (d DCALicenses) RecentChanges() Changes {
 	var o Changes
 	cutoff := time.Now().AddDate(0, -12, 0)
 	for _, dd := range d {
+		if skip[dd.LicenseNumber] {
+			continue
+		}
 		switch dd.LicenseStatus {
 		case "Inactive":
 			if dd.Expiration.After(time.Now()) {
