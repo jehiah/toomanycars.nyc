@@ -33,3 +33,17 @@ DATASET=h7zy-iq3d
 DATASET=7cgt-uhhz
 FIELDS="source_id,status,shape_leng,shape_area"
 curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$select=${FIELDS}&\$limit=200000" --silent  > data/DOITT_planimetrics_parking_lot.json
+
+
+#################
+# Building Footprint
+# Subtype: Garage
+###############
+
+# https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh
+# https://dev.socrata.com/foundry/data.cityofnewyork.us/6kx9-25sv
+DATASET=nqwf-w8eh
+DATASET=6kx9-25sv
+FIELDS="doitt_id,bin,feat_code,shape_area"
+WHERE="feat_code=5110"
+curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$where=${WHERE}&\$select=${FIELDS}&\$limit=500000" --silent  > data/DOITT_planimetrics_building_garages.json

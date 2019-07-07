@@ -9,6 +9,9 @@ import (
 	"time"
 )
 
+// Based on @Pollytrott testimony at City Council
+const BaseCurbParking int = 3000000
+
 type Change struct {
 	EffectiveDate time.Time
 	Spaces        int
@@ -25,6 +28,10 @@ func (c Change) Future() bool {
 }
 
 type Changes []Change
+
+func (c Changes) EstimateSpaces() int {
+	return BaseCurbParking + c.DeltaSpaces()
+}
 
 func (c Changes) DeltaSpaces() (spaces int) {
 	for _, r := range c {

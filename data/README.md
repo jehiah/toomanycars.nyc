@@ -38,3 +38,10 @@ DCA Legally Operating Businesses (updated regularly)
 Parking Lot Maps https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d
 https://data.cityofnewyork.us/resource/7cgt-uhhz.json
     source_id, status, shape_area
+
+https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh
+Building Footprint
+    subtype: garage: 5110 (aka 'feat_code')
+
+NYC BIN lookup
+http://a030-goat.nyc.gov/goat/FunctionBN?bin=null

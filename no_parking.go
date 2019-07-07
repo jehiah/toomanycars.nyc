@@ -9,6 +9,7 @@ import (
 	"sort"
 
 	parkingdata "github.com/jehiah/🚫🚗.nyc/data"
+	"golang.org/x/text/message"
 )
 
 type Data struct {
@@ -16,6 +17,7 @@ type Data struct {
 	CurbParking          parkingdata.Changes
 	DCA                  parkingdata.DCALicenses
 	ParkingLot           parkingdata.ParkingLots
+	PrivateGarages       parkingdata.Garages
 }
 
 func (d Data) RecentChanges() parkingdata.Changes {
@@ -28,7 +30,7 @@ func (d Data) RecentChanges() parkingdata.Changes {
 }
 
 func (d Data) ParkingSpaces() int {
-	return d.InitialParkingSpaces + d.CurbParking.DeltaSpaces() + d.DCA.Spaces() + d.ParkingLot.EstimateSpaces()
+	return d.CurbParking.EstimateSpaces() + d.DCA.Spaces() + d.ParkingLot.EstimateSpaces() + d.PrivateGarages.EstimateSpaces()
 }
 
 func tokenString(s string) []string {
@@ -41,11 +43,22 @@ func tokenString(s string) []string {
 
 func main() {
 	flag.Parse()
+	p := message.NewPrinter(message.MatchLanguage("en"))
 
 	funcMap := template.FuncMap{
 		"tokenString": tokenString,
 		"millionsqft": func(n float64) float64 {
 			return n / 1000000.0
+		},
+		"commify": func(v interface{}) string {
+			switch v.(type) {
+			case int:
+				return p.Sprintf("%d", v)
+			case float64:
+				return p.Sprintf("%.1f", v)
+			default:
+				panic(fmt.Sprintf("unknown type %T for %#v", v, v))
+			}
 		},
 	}
 
@@ -65,9 +78,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	doittPrivateGarages, err := parkingdata.ParseDOITTGaragesFromFile("data/DOITT_planimetrics_building_garages.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Printf("DOT changes %d", curbParking.DeltaSpaces())
 	log.Printf("DCA managed spaces %d", dca.Spaces())
 	log.Printf("DOITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", len(doittParkingLot), doittParkingLot.SurfaceArea(), doittParkingLot.EstimateSpaces())
+	log.Printf("DOITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", len(doittPrivateGarages), doittPrivateGarages.SurfaceArea(), doittPrivateGarages.EstimateSpaces())
 
 	w, err := os.Create("www/index.html")
 	defer w.Close()
@@ -75,10 +93,11 @@ func main() {
 		log.Fatal(err)
 	}
 	err = t.ExecuteTemplate(w, "index.html", Data{
-		InitialParkingSpaces: 3000000 - 600000,
+		InitialParkingSpaces: 3000000,
 		CurbParking:          curbParking,
 		DCA:                  dca,
 		ParkingLot:           doittParkingLot,
+		PrivateGarages:       doittPrivateGarages,
 	})
 	if err != nil {
 		log.Fatal(err)

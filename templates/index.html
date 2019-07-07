@@ -25,21 +25,25 @@
 
 
 <div class="row">
-<div class="col-sm-2 offset-sm-2 parking-subtotal">
- <strong>{{.DCA.Spaces}}</strong> <br/>
+<div class="col-sm-2 offset-sm-1 parking-subtotal">
+ <strong>{{.DCA.Spaces | commify}}</strong> <br/>
  <small>$ Parking Grage / Lot</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
- <strong>????</strong> <br/>
+ <strong>{{.CurbParking.EstimateSpaces | commify}}</strong> <br/>
  <small>Curbside Parking</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
- <strong>{{.ParkingLot.EstimateSpaces}}</strong> <br/>
- <small>{{len .ParkingLot}} Parking Lots covering {{printf "%.1f" (millionsqft .ParkingLot.SurfaceArea)}} million sqft</small>
+ <strong>{{.ParkingLot.EstimateSpaces | commify}}</strong> <br/>
+ <small>{{len .ParkingLot | commify}} Parking Lots<br/>covering {{(millionsqft .ParkingLot.SurfaceArea)| commify}} million sqft</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
  <strong>????</strong> <br/>
  <small>Driveways</small>
+</div>
+<div class="col-sm-2 parking-subtotal">
+ <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <br/>
+ <small>{{len .PrivateGarages | commify}} Private Car Garages<br/>covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft</small>
 </div>
 
 
@@ -63,10 +67,20 @@
 
 
 <div class="row">
-<p>Parking Garage and Parking Lot Data sourced from Department of Consumer Affairs (DCA) via NYC Open Data <a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally Operating Businesses</a>.
+<p><strong>Methodology and Data Sources</strong>:</p>
+<p>Parking Garage and Parking Lot Data sourced from NYC Department of Consumer Affairs (DCA) via NYC Open Data <a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally Operating Businesses</a>.</p>
+<p>Parking Lot data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d">Planimetrics basemap with Parking Lot features</a>. Parking Spaces estimated at 350 sq ft per parking space rounded down to the nearest number of total spaces per lot.</p>
+<p>Private Car Garage data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh">Planimetrics Building Footprints</a>. Parking spaces estimated at 1 parking space for garages
+</p>
+</div>
+<div class="row">
+<p><strong>Releated Research</strong>:</p>
+<ul>
+  <li><a href="https://www.mba.org/2018-press-releases/july/riha-releases-new-report-quantified-parking-comprehensive-parking-inventories-for-five-major-us-cities">1.8M parking stalls - 2018 The Mortgage Bankers Association's Research Institute for Housing America (RIHA)</a></li>
+</ul>
+  
 
 </div>
-
 
 </div>
 </body>
