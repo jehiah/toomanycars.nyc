@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+#################
+# DCA LICENSE DATA
+#################
 # https://dev.socrata.com/foundry/data.cityofnewyork.us/p2mh-mrfv
 # API Docs ^^
 DATASET=p2mh-mrfv
@@ -19,3 +23,13 @@ cat data/dca_licenses_tmp.json | jq -c '.[]' >> data/dca_licenses.json
 gsed -i -e 's/^{/,{/g' data/dca_licenses.json
 echo "]" >> data/dca_licenses.json
 rm data/dca_licenses_tmp.json
+
+
+###################
+# Parking Lot Map Data
+###################
+
+DATASET=h7zy-iq3d
+DATASET=7cgt-uhhz
+FIELDS="source_id,status,shape_leng,shape_area"
+curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$select=${FIELDS}&\$limit=200000" --silent  > data/DOITT_planimetrics_parking_lot.json

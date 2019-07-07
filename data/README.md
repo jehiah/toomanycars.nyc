@@ -35,4 +35,6 @@ DCA Legally Operating Businesses (updated regularly)
     LicenseNumber,LicenseCreationDate,LicenseExpireDate,Industry,BusinessName,BusinessName2,AddressBuilding,AddressStreetName,AddressBorough,Detail
     
 
-Maps https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d
+Parking Lot Maps https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d
+https://data.cityofnewyork.us/resource/7cgt-uhhz.json
+    source_id, status, shape_area

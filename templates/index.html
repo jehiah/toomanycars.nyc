@@ -34,8 +34,8 @@
  <small>Curbside Parking</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
- <strong>????</strong> <br/>
- <small>Parking Lot</small>
+ <strong>{{.ParkingLot.EstimateSpaces}}</strong> <br/>
+ <small>{{len .ParkingLot}} Parking Lots covering {{printf "%.1f" (millionsqft .ParkingLot.SurfaceArea)}} million sqft</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
  <strong>????</strong> <br/>
