@@ -26,15 +26,15 @@
 
 <div class="row">
 <div class="col-sm-2 offset-sm-1 parking-subtotal">
- <strong>{{.DCA.Spaces | commify}}</strong> <br/>
+ <strong>{{.DCA.Spaces | commify}}</strong> <span class="badge badge-success">Verified</span><br/>
  <small>$ Parking Grage / Lot</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
- <strong>{{.CurbParking.EstimateSpaces | commify}}</strong> <br/>
- <small>Curbside Parking</small>
+ <strong>{{.OnStreet.EstimateSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
+ <small>On-Street Parking</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
- <strong>{{.ParkingLot.EstimateSpaces | commify}}</strong> <br/>
+ <strong>{{.ParkingLot.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span><br/>
  <small>{{len .ParkingLot | commify}} Parking Lots<br/>covering {{(millionsqft .ParkingLot.SurfaceArea)| commify}} million sqft</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
@@ -42,7 +42,7 @@
  <small>Driveways</small>
 </div>
 <div class="col-sm-2 parking-subtotal">
- <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <br/>
+ <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span> <br/>
  <small>{{len .PrivateGarages | commify}} Private Car Garages<br/>covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft</small>
 </div>
 

@@ -10,7 +10,7 @@ import (
 )
 
 // Based on @Pollytrott testimony at City Council
-const BaseCurbParking int = 3000000
+const BaseOnStreetParking int = 3000000
 
 type Change struct {
 	EffectiveDate time.Time
@@ -30,7 +30,7 @@ func (c Change) Future() bool {
 type Changes []Change
 
 func (c Changes) EstimateSpaces() int {
-	return BaseCurbParking + c.DeltaSpaces()
+	return BaseOnStreetParking + c.DeltaSpaces()
 }
 
 func (c Changes) DeltaSpaces() (spaces int) {

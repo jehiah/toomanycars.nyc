@@ -14,7 +14,7 @@ import (
 
 type Data struct {
 	InitialParkingSpaces int
-	CurbParking          parkingdata.Changes
+	OnStreet             parkingdata.Changes
 	DCA                  parkingdata.DCALicenses
 	ParkingLot           parkingdata.ParkingLots
 	PrivateGarages       parkingdata.Garages
@@ -22,7 +22,7 @@ type Data struct {
 
 func (d Data) RecentChanges() parkingdata.Changes {
 	var o parkingdata.Changes
-	o = d.CurbParking
+	o = d.OnStreet
 	o = append(o, d.DCA.RecentChanges()...)
 	sort.Slice(o, func(i, j int) bool { return o[i].EffectiveDate.After(o[j].EffectiveDate) })
 
@@ -30,7 +30,7 @@ func (d Data) RecentChanges() parkingdata.Changes {
 }
 
 func (d Data) ParkingSpaces() int {
-	return d.CurbParking.EstimateSpaces() + d.DCA.Spaces() + d.ParkingLot.EstimateSpaces() + d.PrivateGarages.EstimateSpaces()
+	return d.OnStreet.EstimateSpaces() + d.DCA.Spaces() + d.ParkingLot.EstimateSpaces() + d.PrivateGarages.EstimateSpaces()
 }
 
 func tokenString(s string) []string {
@@ -82,7 +82,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("DOT changes %d", curbParking.DeltaSpaces())
+	log.Printf("DOT OnStreet changes %d (Estimated %d spaces)", curbParking.DeltaSpaces(), curbParking.EstimateSpaces())
 	log.Printf("DCA managed spaces %d", dca.Spaces())
 	log.Printf("DOITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", len(doittParkingLot), doittParkingLot.SurfaceArea(), doittParkingLot.EstimateSpaces())
 	log.Printf("DOITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", len(doittPrivateGarages), doittPrivateGarages.SurfaceArea(), doittPrivateGarages.EstimateSpaces())
@@ -94,7 +94,7 @@ func main() {
 	}
 	err = t.ExecuteTemplate(w, "index.html", Data{
 		InitialParkingSpaces: 3000000,
-		CurbParking:          curbParking,
+		OnStreet:             curbParking,
 		DCA:                  dca,
 		ParkingLot:           doittParkingLot,
 		PrivateGarages:       doittPrivateGarages,
