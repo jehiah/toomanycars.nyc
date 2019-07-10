@@ -1,4 +1,4 @@
-package parkingdata
+package data
 
 type DCALink struct {
 	License         string

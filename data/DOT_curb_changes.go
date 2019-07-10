@@ -1,4 +1,4 @@
-package parkingdata
+package data
 
 import (
 	"encoding/csv"

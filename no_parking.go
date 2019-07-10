@@ -8,20 +8,19 @@ import (
 	"os"
 	"sort"
 
-	parkingdata "github.com/jehiah/🚫🚗.nyc/data"
+	"github.com/jehiah/toomanycars.nyc/data"
 	"golang.org/x/text/message"
 )
 
 type Data struct {
-	InitialParkingSpaces int
-	OnStreet             parkingdata.Changes
-	DCA                  parkingdata.DCALicenses
-	ParkingLot           parkingdata.ParkingLots
-	PrivateGarages       parkingdata.Garages
+	OnStreet       data.Changes
+	DCA            data.DCALicenses
+	ParkingLot     data.ParkingLots
+	PrivateGarages data.Garages
 }
 
-func (d Data) RecentChanges() parkingdata.Changes {
-	var o parkingdata.Changes
+func (d Data) RecentChanges() data.Changes {
+	var o data.Changes
 	o = d.OnStreet
 	o = append(o, d.DCA.RecentChanges()...)
 	sort.Slice(o, func(i, j int) bool { return o[i].EffectiveDate.After(o[j].EffectiveDate) })
@@ -66,19 +65,19 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	curbParking, err := parkingdata.ParseCurbChangesFromFile("data/curb_changes.csv")
+	curbParking, err := data.ParseCurbChangesFromFile("data/curb_changes.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
-	dca, err := parkingdata.ParseDCAFromFile("data/dca_licenses.json")
+	dca, err := data.ParseDCAFromFile("data/dca_licenses.json")
 	if err != nil {
 		log.Fatal(err)
 	}
-	doittParkingLot, err := parkingdata.ParseDOITTParkingLotFromFile("data/DOITT_planimetrics_parking_lot.json")
+	doittParkingLot, err := data.ParseDOITTParkingLotFromFile("data/DOITT_planimetrics_parking_lot.json")
 	if err != nil {
 		log.Fatal(err)
 	}
-	doittPrivateGarages, err := parkingdata.ParseDOITTGaragesFromFile("data/DOITT_planimetrics_building_garages.json")
+	doittPrivateGarages, err := data.ParseDOITTGaragesFromFile("data/DOITT_planimetrics_building_garages.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,11 +92,10 @@ func main() {
 		log.Fatal(err)
 	}
 	err = t.ExecuteTemplate(w, "index.html", Data{
-		InitialParkingSpaces: 3000000,
-		OnStreet:             curbParking,
-		DCA:                  dca,
-		ParkingLot:           doittParkingLot,
-		PrivateGarages:       doittPrivateGarages,
+		OnStreet:       curbParking,
+		DCA:            dca,
+		ParkingLot:     doittParkingLot,
+		PrivateGarages: doittPrivateGarages,
 	})
 	if err != nil {
 		log.Fatal(err)

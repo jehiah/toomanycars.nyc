@@ -1,4 +1,4 @@
-module github.com/jehiah/🚫🚗.nyc
+module github.com/jehiah/toomanycars.nyc
 
 go 1.12
 
