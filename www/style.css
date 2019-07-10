@@ -203,6 +203,10 @@ body {
 }
 .parking-subtotal {
     text-align:center;
+    color:  #333;;
+}
+.parking-subtotal > .card {
+    height: 5.5rem;
 }
 .recent-changes {
     margin-top:30px;
