@@ -25,15 +25,15 @@
 
 
 <div class="row">
-<div class="col-sm-2 parking-subtotal">
+<div class="col-12 col-sm-6 col-md-4 col-lg-2 offset-lg-3 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.DCA.Spaces | commify}}</strong> <span class="badge badge-success">Verified</span><br/>
- <small>$ Parking Grage / Lot</small>
+ <small>{{len .DCA | commify }} DCA Licensed Parking Grage / Lot <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
-<div class="col-sm-2 parking-subtotal">
+<div class="col-12 col-sm-6 col-md-4 col-lg-2 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.MunicipalGarages.Spaces | commify}}</strong> <span class="badge badge-success">Verified</span><br/>
@@ -41,7 +41,7 @@
    </div>
  </div>
 </div>
-<div class="col-sm-2 parking-subtotal">
+<div class="col-12 col-sm-6 col-md-4 col-lg-2 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.OnStreet.EstimateSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
@@ -49,7 +49,7 @@
    </div>
  </div>
 </div>
-<div class="col-sm-2 parking-subtotal">
+<div class="col-12 col-sm-6 col-md-4 col-lg-2 offset-lg-3 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.ParkingLot.EstimateSpaces .DCA.EstimateLotSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span><br/>
@@ -57,7 +57,7 @@
    </div>
  </div>
 </div>
-<div class="col-sm-2 parking-subtotal">
+<div class="col-12 col-sm-6 col-md-4 col-lg-2 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
  <strong>?,???,???</strong> <br/>
@@ -65,7 +65,7 @@
    </div>
  </div>
 </div>
-<div class="col-sm-2 parking-subtotal">
+<div class="col-12 col-sm-6 col-md-4 col-lg-2 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span> <br/>
