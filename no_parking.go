@@ -13,10 +13,11 @@ import (
 )
 
 type Data struct {
-	OnStreet       data.Changes
-	DCA            data.DCALicenses
-	ParkingLot     data.ParkingLots
-	PrivateGarages data.Garages
+	OnStreet         data.Changes
+	DCA              data.DCALicenses
+	ParkingLot       data.ParkingLots
+	PrivateGarages   data.Garages
+	MunicipalGarages data.MunicipalGarages
 }
 
 func (d Data) RecentChanges() data.Changes {
@@ -29,7 +30,12 @@ func (d Data) RecentChanges() data.Changes {
 }
 
 func (d Data) ParkingSpaces() int {
-	return d.OnStreet.EstimateSpaces() + d.DCA.Spaces() + d.ParkingLot.EstimateSpaces() + d.PrivateGarages.EstimateSpaces()
+	spaces := d.OnStreet.EstimateSpaces()
+	spaces += d.DCA.Spaces()
+	spaces += d.ParkingLot.EstimateSpaces(d.DCA.EstimateLotSpaces())
+	spaces += d.PrivateGarages.EstimateSpaces()
+	spaces += d.MunicipalGarages.Spaces()
+	return spaces
 }
 
 func tokenString(s string) []string {
@@ -83,8 +89,9 @@ func main() {
 	}
 	log.Printf("DOT OnStreet changes %d (Estimated %d spaces)", curbParking.DeltaSpaces(), curbParking.EstimateSpaces())
 	log.Printf("DCA managed spaces %d", dca.Spaces())
-	log.Printf("DoITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", len(doittParkingLot), doittParkingLot.SurfaceArea(), doittParkingLot.EstimateSpaces())
+	log.Printf("DoITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", len(doittParkingLot), doittParkingLot.SurfaceArea(), doittParkingLot.EstimateSpaces(dca.EstimateLotSpaces()))
 	log.Printf("DoITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", len(doittPrivateGarages), doittPrivateGarages.SurfaceArea(), doittPrivateGarages.EstimateSpaces())
+	log.Printf("%d Municipal Grages with %d psaces", len(data.AllMunicipalGarages), data.AllMunicipalGarages.Spaces())
 
 	w, err := os.Create("www/index.html")
 	defer w.Close()
@@ -92,10 +99,11 @@ func main() {
 		log.Fatal(err)
 	}
 	err = t.ExecuteTemplate(w, "index.html", Data{
-		OnStreet:       curbParking,
-		DCA:            dca,
-		ParkingLot:     doittParkingLot,
-		PrivateGarages: doittPrivateGarages,
+		OnStreet:         curbParking,
+		DCA:              dca,
+		ParkingLot:       doittParkingLot,
+		PrivateGarages:   doittPrivateGarages,
+		MunicipalGarages: data.AllMunicipalGarages,
 	})
 	if err != nil {
 		log.Fatal(err)

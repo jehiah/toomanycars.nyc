@@ -115,15 +115,34 @@ func ParseDCAFromFile(file string) (DCALicenses, error) {
 }
 
 func (d DCALicenses) Spaces() (spaces int) {
+	for _, dd := range d.Active() {
+		spaces += dd.Spaces()
+	}
+	return
+}
+func (d DCALicenses) EstimateLotSpaces() (spaces int) {
+	for _, dd := range d.Active() {
+		switch dd.Industry {
+		case "Garage and Parking Lot":
+			spaces += (dd.Spaces() / 2)
+		case "Parking Lot":
+			spaces += dd.Spaces()
+		}
+	}
+	return
+}
+func (d DCALicenses) Active() DCALicenses {
+	var o DCALicenses
 	now := time.Now()
 	for _, dd := range d {
 		if dd.LicenseStatus == "Inactive" && dd.Expiration.Before(now) {
 			continue
 		}
-		spaces += dd.Spaces()
+		o = append(o, dd)
 	}
-	return
+	return o
 }
+
 func (d DCALicenses) RecentChanges() Changes {
 	// build skip list
 	skip := make(map[string]bool)

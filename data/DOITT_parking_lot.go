@@ -23,7 +23,10 @@ func (p ParkingLots) SurfaceArea() (total float64) {
 	return
 }
 
-func (p ParkingLots) EstimateSpaces() (spaces int) {
+// EstimateSpaces excluding the provided number of spaces
+// exclusion allows accounting for double count of DCA licensed lots
+func (p ParkingLots) EstimateSpaces(exclude int) (spaces int) {
+	spaces -= exclude
 	for _, pp := range p {
 		spaces += pp.EstimateSpaces()
 	}
