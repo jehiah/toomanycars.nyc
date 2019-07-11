@@ -38,6 +38,7 @@ DCA Legally Operating Businesses (updated regularly)
 Parking Lot Maps https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d
 https://data.cityofnewyork.us/resource/7cgt-uhhz.json
     source_id, status, shape_area
+    20965sqft/27=776sq per space
 
 https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh
 Building Footprint
@@ -59,6 +60,7 @@ driveway size and location
 2014 BC 406.7.7
 https://www1.nyc.gov/assets/buildings/apps/pdf_viewer/viewer.html?file=2014CC_BC_Chapter_4_Special_Detailed_Requirements.pdf&section=conscode_2014
 
+
 Private garages and carports, as defined by this section, shall be classified as Group U occu
  Certificate of Occupancy>
      > garage 
@@ -68,6 +70,23 @@ https://data.cityofnewyork.us/Housing-Development/DOB-Certificate-Of-Occupancy/b
     >
     BIN 1083785  http://a810-bisweb.nyc.gov/bisweb/CofoDocumentContentServlet?passjobnumber=null&cofomatadata1=cofo&cofomatadata2=M&cofomatadata3=120&cofomatadata4=526000&cofomatadata5=120526911.PDF
     > PARKING GARAGE FOR 205 MOTOR VEHICLES
+    
+    BIN: 4100767 - CO 421412359T001
+    > 27 OUTDOOR ACCESSORY PARKING SPACES AND 2 LOADING BERTHS
+    
+    BIN: 4044890 - CO 401066047T001
+    > 58 ACCESSORY OPEN PARKING SPACES OG FULLY ATTENDED
+    
+    BIN: 4566130 - CO 402159123F
+    > 9 OFF STREET OPEN PARKING SPACES
+    
+Buildings built before 1938 aren’t required to have a Certificate of Occupancy – unless later alterations changed its use, egress or occupancy. If you require proof of a building’s legal use – and it’s exempt from the CO requirement – contact the Department’s borough office where the property is located to request a Letter of No Objection.
+
+
+Certificate of Occupancy Lookup: http://a810-bisweb.nyc.gov/bisweb/bispi00.jsp
+    > BIN lookup - http://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?bin=4096312&go4=+GO+&requestid=0
+    > Certificate of Occupancy - http://a810-bisweb.nyc.gov/bisweb/COsByLocationServlet?requestid=1&allbin=4096312
+        
 
 Planimetrics base image
 https://github.com/CityOfNewYork/nyc-geo-metadata

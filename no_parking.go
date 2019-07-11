@@ -18,6 +18,7 @@ type Data struct {
 	ParkingLot       data.ParkingLots
 	PrivateGarages   data.Garages
 	MunicipalGarages data.MunicipalGarages
+	Driveways        data.Driveways
 }
 
 func (d Data) RecentChanges() data.Changes {
@@ -35,6 +36,7 @@ func (d Data) ParkingSpaces() int {
 	spaces += d.ParkingLot.EstimateSpaces(d.DCA.EstimateLotSpaces())
 	spaces += d.PrivateGarages.EstimateSpaces()
 	spaces += d.MunicipalGarages.Spaces()
+	spaces += d.Driveways.GuessSpaces
 	return spaces
 }
 
@@ -104,6 +106,7 @@ func main() {
 		ParkingLot:       doittParkingLot,
 		PrivateGarages:   doittPrivateGarages,
 		MunicipalGarages: data.AllMunicipalGarages,
+		Driveways:        data.DrivewayGuess,
 	})
 	if err != nil {
 		log.Fatal(err)

@@ -52,8 +52,8 @@
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-3 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
- <strong>?,???,???</strong> <br/>
- <small>???,??? Driveways</small>
+ <strong>{{.Driveways.GuessSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
+ <small>{{.Driveways.GuessCount | commify}} Driveways <span class="badge badge-danger">Guess</span></small>
    </div>
  </div>
 </div>
@@ -69,7 +69,7 @@
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span> <br/>
- <small>{{len .PrivateGarages | commify}} Private Car Garages <span class="badge badge-success">Verified</span><br/>covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
+ <small>{{len .PrivateGarages | commify}} Private Detatched Car Garages <span class="badge badge-success">Verified</span><br/>covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
@@ -99,7 +99,7 @@
 <h3>Data Sources:</h3>
 <p>Parking Garage and Parking Lot Data sourced from NYC Department of Consumer Affairs (DCA) via NYC Open Data <a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally Operating Businesses</a>.</p>
 <p>Parking Lot data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d">Planimetrics basemap with Parking Lot features</a>. Parking Spaces estimated at 350 sq ft per parking space rounded down to the nearest number of total spaces per lot. An acre lot (43560 sq ft) can fit between 80 and 170 cars in a self-parking style lot (550 sqft - 256 sqft per car). An estimated number of {{.DCA.EstimateLotSpaces | commify}} spaces are subtracted to remove double counting of DCA licensed Parkign Lots.</p>
-<p>Private Car Garage data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh">Planimetrics Building Footprints</a>. Parking spaces estimated at 1 parking space for garages
+<p>Private Car Garage data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh">Planimetrics Building Footprints</a>. Parking spaces estimated at 1 parking space for garages under 285 sqft, 2spaces for garages under 470 sqft, 3 spaces for garages under 600 sqft. Attached garages are excluded from this dataset.
 </p>
 </div>
 </div>
