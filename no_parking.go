@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/jehiah/toomanycars.nyc/data"
 	"golang.org/x/text/message"
@@ -25,7 +26,13 @@ func (d Data) RecentChanges() data.Changes {
 	var o data.Changes
 	o = d.OnStreet
 	o = append(o, d.DCA.RecentChanges()...)
-	sort.Slice(o, func(i, j int) bool { return o[i].EffectiveDate.After(o[j].EffectiveDate) })
+	sort.Slice(o, func(i, j int) bool {
+		if o[i].EffectiveDate.Equal(o[j].EffectiveDate) {
+			return strings.Compare(o[i].Name, o[j].Name) == -1
+		}
+		return o[i].EffectiveDate.After(o[j].EffectiveDate)
+
+	})
 
 	return o
 }
@@ -93,7 +100,7 @@ func main() {
 	log.Printf("DCA managed spaces %d", dca.Spaces())
 	log.Printf("DoITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", len(doittParkingLot), doittParkingLot.SurfaceArea(), doittParkingLot.EstimateSpaces(dca.EstimateLotSpaces()))
 	log.Printf("DoITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", len(doittPrivateGarages), doittPrivateGarages.SurfaceArea(), doittPrivateGarages.EstimateSpaces())
-	log.Printf("%d Municipal Grages with %d psaces", len(data.AllMunicipalGarages), data.AllMunicipalGarages.Spaces())
+	log.Printf("%d Municipal Grages with %d spaces", len(data.AllMunicipalGarages), data.AllMunicipalGarages.Spaces())
 
 	w, err := os.Create("www/index.html")
 	defer w.Close()
