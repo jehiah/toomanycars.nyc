@@ -60,6 +60,7 @@ driveway size and location
 2014 BC 406.7.7
 https://www1.nyc.gov/assets/buildings/apps/pdf_viewer/viewer.html?file=2014CC_BC_Chapter_4_Special_Detailed_Requirements.pdf&section=conscode_2014
 
+# NYC Buildings - Certificate of Occupancy
 
 Private garages and carports, as defined by this section, shall be classified as Group U occu
  Certificate of Occupancy>
@@ -96,3 +97,32 @@ https://github.com/CityOfNewYork/nyc-geo-metadata/blob/master/Metadata/Metadata_
 https://medium.com/the-downlinq/car-localization-and-counting-with-overhead-imagery-an-interactive-exploration-9d5a029a596b
 https://medium.com/the-downlinq/yolt-arxiv-paper-and-code-release-8b30d40d095b
 > https://github.com/CosmiQ/simrdwn
+
+
+# Census Data
+
+https://factfinder.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_15_5YR_B08201&prodType=table
+
+1981663 cars in the 5 boroughs "available for use" to households. 2013-2017 5yr estimate
+
+# NY DMV Data
+
+https://dmv.ny.gov/about-dmv/statistical-summaries
+
+1,923,041 standard vehicles, 75,593 commercial, 100k taxi. 2017 data
+
+# PA NYNJ Traffic Volumes
+
+https://corpinfo.panynj.gov/pages/pa-traffic-volume/
+
+50k Lincolin [EB], 43k Holland, 142k GWB
+
+# MTA Bridge Vehicle Counts
+
+http://web.mta.info/bandt/html/btintro.html
+
+868k each weekday
+
+# DOT Bridges Vehicle Counts
+
+Ed Koch 170k, Brooklyn 124k, Williamsburg 111k, Manhattan 75k
