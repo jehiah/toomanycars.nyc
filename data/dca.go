@@ -40,14 +40,16 @@ func (d DCALicense) Change() Change {
 	if d.BusinessName2 != "" {
 		n = d.BusinessName2
 	}
+	addr := fmt.Sprintf("%s %s", d.AddressBuilding, d.AddressStreetName)
 	return Change{
 		EffectiveDate: dt,
 		Spaces:        s,
 		Borough:       d.Borough,
 		Category:      d.Industry,
 		Name:          n,
-		Description:   fmt.Sprintf("%s %s", d.AddressBuilding, d.AddressStreetName),
+		Description:   addr,
 		Source:        fmt.Sprintf("DCA License %s", d.LicenseNumber),
+		ReferenceURL:  fmt.Sprintf("https://www.google.com/maps/place/%s", strings.ReplaceAll(fmt.Sprintf("%s, %s, NY", addr, d.Borough), " ", "+")),
 	}
 }
 
@@ -168,7 +170,8 @@ func (d DCALicenses) RecentChanges() Changes {
 	}
 
 	var o Changes
-	cutoff := time.Now().AddDate(0, -12, 0)
+	// 3 months
+	cutoff := time.Now().AddDate(0, -3, 0)
 	for _, dd := range d {
 		if skip[dd.LicenseNumber] {
 			continue

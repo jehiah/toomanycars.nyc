@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>🚫🚗.nyc</title>
+    <title>too many🚗.nyc</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -28,8 +28,8 @@
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-3 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
- <strong>{{.DCA.Spaces | commify}}</strong> <span class="badge badge-success">Verified</span><br/>
- <small>{{len .DCA | commify }} DCA Licensed<br/>Parking Grage / Lot <span class="badge badge-success">Verified</span></small>
+ <strong>{{.OnStreet.EstimateSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
+ <small>On-Street Parking</small>
    </div>
  </div>
 </div>
@@ -44,16 +44,16 @@
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
- <strong>{{.OnStreet.EstimateSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
- <small>On-Street Parking</small>
+ <strong>{{.DCA.Spaces | commify}}</strong> <span class="badge badge-success">Verified</span><br/>
+ <small>{{len .DCA | commify }} DCA Licensed<br/>Parking Grage / Lot <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-3 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
- <strong>{{.Driveways.GuessSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
- <small>{{.Driveways.GuessCount | commify}} Driveways <span class="badge badge-danger">Guess</span></small>
+ <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span> <br/>
+ <small>{{len .PrivateGarages | commify}} Private Detatched Car Garages <span class="badge badge-success">Verified</span><br/>covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
@@ -68,39 +68,135 @@
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 parking-subtotal">
   <div class="card">
     <div class="card-body p-2">
- <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span> <br/>
- <small>{{len .PrivateGarages | commify}} Private Detatched Car Garages <span class="badge badge-success">Verified</span><br/>covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
+ <strong>{{.Driveways.GuessSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
+ <small>{{.Driveways.GuessCount | commify}} Driveways <span class="badge badge-danger">Guess</span></small>
    </div>
  </div>
 </div>
 
-
 </div>
 
 <div class="row">
-<table class="table table-sm table-dark col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 recent-changes" >
+  <div class="col-sm-12">
+<p class="text-center">See something missing? <a href="https://on.jehiah.cz/2xVUmq6">Submit an Update</a>. Last updated {{.Updated.Format "Jan 02 2006"}}.</p>
+<p class="text-center">by <a href="https://jehiah.cz/">Jehiah</a></p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+<table class="table table-sm table-dark recent-changes" >
+<thead>
+<tr>
+  <th>Date</th>
+  <th>Spaces</th>
+  <th>Category</th>
+  <th>Change</th>
+  <th>Borough</th>
+  <th>Source</th>
+</tr>
+</thead>
 <tbody>
 {{range .RecentChanges}}
 <tr>
-  <td>{{ if .Future }}<i>Planned</i> <small>({{.EffectiveDate.Format "01/02/2006"}})</small>{{else}}{{.EffectiveDate.Format "Jan 02 2006"}}{{ end}}</td>
-  <td><strong class="{{if gt .Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt .Spaces 0}}+{{end}}{{.Spaces}}</strong> {{.Category}} spaces</td>
-  <td>{{.Name}}{{if .Description}}<br/>{{.Description}}{{end}}</td>
-  <td>{{.Borough}}</td>
-  <td>{{if .ReferenceURL}}<a href="{{.ReferenceURL}}">{{.Source}}</a>{{else}}{{.Source}}{{end}}</td>
+  <td class="date">{{ if .Future }}<i>Planned</i><br/><small>({{.EffectiveDate.Format "Jan 2006"}})</small>{{else}}{{.EffectiveDate.Format "Jan 02 2006"}}{{ end}}</td>
+  <td class="spaces"><strong class="{{if gt .Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt .Spaces 0}}+{{end}}{{.Spaces}}</strong></td>
+  <td class="category">{{.Category}}</td>
+  <td class="desc">{{if .ReferenceURL}}<a href="{{.ReferenceURL}}">{{.Name}}</a>{{else}}{{.Name}}{{end}}{{if .Description}}<br/>{{.Description}}{{end}}</td>
+  <td class="borough">{{.Borough}}</td>
+  <td class="src">{{.Source}}</td>
 </tr>
 {{end}}
 </tbody>
 </table>
 </div>
+</div>
 
 
 <div class="row">
 <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-sm-10 offset-sm-1">
+<h3>Grading</h3>
+<p><span class="badge badge-success">Verified</span> - Based on Open Data and correctness managed by a NYC agency.</p>
+<p><span class="badge badge-warning">Estimate</span> - A reproducible mathmatical estimate based on other known  data.</p>
+<p><span class="badge badge-danger">Guess</span> - An unverified guess or unsubstantiated claim that can't be reproduced.</p>
+
 <h3>Data Sources:</h3>
-<p>Parking Garage and Parking Lot Data sourced from NYC Department of Consumer Affairs (DCA) via NYC Open Data <a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally Operating Businesses</a>.</p>
-<p>Parking Lot data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d">Planimetrics basemap with Parking Lot features</a>. Parking Spaces estimated at 350 sq ft per parking space rounded down to the nearest number of total spaces per lot. An acre lot (43560 sq ft) can fit between 80 and 170 cars in a self-parking style lot (550 sqft - 256 sqft per car). An estimated number of {{.DCA.EstimateLotSpaces | commify}} spaces are subtracted to remove double counting of DCA licensed Parkign Lots.</p>
-<p>Private Car Garage data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh">Planimetrics Building Footprints</a>. Parking spaces estimated at 1 parking space for garages under 285 sqft, 2spaces for garages under 470 sqft, 3 spaces for garages under 600 sqft. Attached garages are excluded from this dataset.
-</p>
+
+<div class="card mb-3">
+  <div class="card-header">
+    On-Street Parking &mdash; <strong>{{.OnStreet.EstimateSpaces | commify}}</strong> spaces <span class="badge badge-danger">Guess</span>
+  </div>
+  
+  <div class="card-body">
+     <p class="card-text">On-Street parking regulations are the responsibitly of <a href="https://www1.nyc.gov/html/dot/html/motorist/motorist.shtml">NYC Department of Transportation</a></p>
+     <p class="card-text">DOT Commissioner Polly Trottenberg testifed before the NYC Council that there are 3 million parking spaces in NYC. This number has been unsubstantiated and isn't broken down into individual buroughs so it is rated as a guess.</p>
+     <p class="card-text">Changes to on-street parking based on estimates from DOT in <a href="https://www1.nyc.gov/html/dot/html/about/current-projects.shtml">project presentations</a>.</p>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    Municipal Parking Grages Parking &mdash; <strong>{{.MunicipalGarages.Spaces | commify}}</strong> spaces <span class="badge badge-success">Verified</span>
+  </div>
+  
+  <div class="card-body">
+     <p class="card-text">Data sourced from NYC Department of Transportation (DOT) via NYC Open Data of {{len .MunicipalGarages}} <a href="https://data.cityofnewyork.us/browse?category=Transportation&q=Municipal+Parking+Facilities">Municipal Parking Facilities</a></p>
+  </div>
+</div>
+
+
+<div class="card mb-3">
+  <div class="card-header">
+   DCA Licensed Parking Grage / Lot &mdash; <strong>{{.DCA.Spaces | commify}}</strong> spaces <span class="badge badge-success">Verified</span>
+  </div>
+  <div class="card-body">
+    <p class="card-text">Data sourced from NYC Department of Consumer Affairs (DCA) via NYC Open Data <a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally Operating Businesses</a> with active licenses.</p>
+  </div>
+</div>
+
+
+<div class="card mb-3">
+  <div class="card-header">
+   Private Detatched Car Garages &mdash; <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> spaces <span class="badge badge-warning">Estimate</span>
+  </div>
+  <div class="card-body">
+    <p class="card-text">Data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh">Planimetrics Building Footprints</a>.</p>
+    <p class="card-text">
+        Planimetrics records {{len .PrivateGarages | commify}} <small><span class="badge badge-success">Verified</span></small> garages covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <small><span class="badge badge-success">Verified</span></small>
+    </p>
+    <p class="card-text">Parking spaces estimated at 1 parking space for garages under 285 sqft, 2 spaces for garages 286-470 sqft, 3 spaces for garages 471-600 sqft.</p>
+    <p class="card-text">Note: Attached garages are not present in this dataset and not estimated.</p>
+  </div>
+</div>
+
+
+<div class="card mb-3">
+  <div class="card-header">
+   Parking Lots &mdash; <strong>{{.ParkingLot.EstimateSpaces .DCA.EstimateLotSpaces | commify}}</strong> spaces <span class="badge badge-warning">Estimate</span>
+  </div>
+  <div class="card-body">
+    <p class="card-text">Data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d">Planimetrics basemap with Parking Lot features</a>.</p>
+
+    <p class="card-text">
+        Planimetrics records {{len .ParkingLot | commify}} <small><span class="badge badge-success">Verified</span></small> lots covering {{(millionsqft .ParkingLot.SurfaceArea) | commify}} million sqft <small><span class="badge badge-success">Verified</span></small>
+    </p>
+  <p class="card-text">The available spaces in each of {{len .ParkingLot | commify}} lots was estimated using 350 sq ft per parking space rounded down to the nearest number of whole spaces per lot. Because this dataset includes an unknown double count of DCA licensed parking lots {{.DCA.EstimateLotSpaces | commify}} spaces were subtracted from the final estimate.</p>
+  <p class="card-text">350sq ft was chosen as the estimated sq ft per space in an average parking lot. For reference an acre lot (43560 sq ft) can fit between 80 and 170 cars in a self-parking style lot which is between 550 sqft - 256 sqft per car. Smaller lots or valet parking lots often achieve a much denser sq ft per parking space.</p>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+   Driveways &mdash; <strong>{{.Driveways.GuessSpaces | commify}}</strong> spaces <span class="badge badge-danger">Guess</span>
+  </div>
+  <div class="card-body">
+    <p class="card-text">Parking spaces in driveways are licensed by NYC Department of Buildings (DOB) as part of the Certificate of Occupancy however buildings built before 1938 aren’t required to have a Certificate of Occupancy. Certificate of Occupancy data is also not provided in a NYC Open Data Dataset.</p>
+    <p class="card-text">An estimate of {{.Driveways.GuessCount | commify}} driveways is based on a guess that there are 1.62 driveways for every detatched garage in NYC, and that each driveway on average has space for two vehicles.</p>
+    <p class="card-text">NYC Department of Buildings (DOB) also manages curb cut licenses but complete data on authorized curb cuts is not available in NYC Open Data. DOB issues approximately 250 new curb cut licenses each year based on NYC Open Data of <a href="https://data.cityofnewyork.us/Housing-Development/DOB-NOW-Build-Approved-Permits/rbx6-tga4/data">Approved Permits</a>.</p>
+  </div>
+</div>
+
+
 </div>
 </div>
 <div class="row">
@@ -108,7 +204,6 @@
 <h3>Releated Research and Parking Estimates:</h3>
 <ul>
   <li><a href="https://www.mba.org/2018-press-releases/july/riha-releases-new-report-quantified-parking-comprehensive-parking-inventories-for-five-major-us-cities">Estimated 1.8M parking stalls - 2018 The Mortgage Bankers Association's Research Institute for Housing America (RIHA)</a></li>
-  
 </ul>
   
 </div>

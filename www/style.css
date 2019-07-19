@@ -199,7 +199,7 @@ body {
     color:#f00;
 }
 .less-parking {
-    color:#0b0;
+/*    color:#0b0; */
 }
 .parking-subtotal {
     text-align:center;
@@ -211,4 +211,22 @@ body {
 }
 .recent-changes {
     margin-top:30px;
+}
+.recent-changes > tbody > tr > td.date {
+	font-size:70%;
+}
+.recent-changes > tbody > tr > td.spaces {
+	text-align:right;
+}
+.recent-changes > tbody > tr > td.category {
+	font-size:80%;
+}
+.recent-changes > tbody > tr > td.borough {
+	font-size:70%;
+}
+.recent-changes > tbody > tr > td.src {
+	font-size:70%;
+}
+.card {
+	color:#212529;
 }

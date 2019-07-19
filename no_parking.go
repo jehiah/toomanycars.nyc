@@ -8,6 +8,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/jehiah/toomanycars.nyc/data"
 	"golang.org/x/text/message"
@@ -20,6 +21,7 @@ type Data struct {
 	PrivateGarages   data.Garages
 	MunicipalGarages data.MunicipalGarages
 	Driveways        data.Driveways
+	Updated          time.Time
 }
 
 func (d Data) RecentChanges() data.Changes {
@@ -107,6 +109,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	est, _ := time.LoadLocation("America/New_York")
 	err = t.ExecuteTemplate(w, "index.html", Data{
 		OnStreet:         curbParking,
 		DCA:              dca,
@@ -114,6 +117,7 @@ func main() {
 		PrivateGarages:   doittPrivateGarages,
 		MunicipalGarages: data.AllMunicipalGarages,
 		Driveways:        data.DrivewayGuess,
+		Updated:          time.Now().In(est),
 	})
 	if err != nil {
 		log.Fatal(err)
