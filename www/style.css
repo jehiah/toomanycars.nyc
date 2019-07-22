@@ -242,3 +242,18 @@ body {
 .card {
 	color:#212529;
 }
+@media (max-width: 575.98px) {
+	#numbers {
+		margin-top:50px;
+		font-size:50px;
+	}
+	.heading {
+		margin:35px 50px;
+	}
+	.subtitle {
+		margin:10px 25px 20px 25px;
+	}
+	.table-sm {
+		font-size:90%;
+	}
+}
