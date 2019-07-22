@@ -10,17 +10,19 @@
 </head>
 <body>
 
+{{ define "numberblock" -}}
+<span class="numbers">{{with $count := (printf "%d" . | tokenString) -}}
+  {{range $index, $char := $count -}}
+  {{if iscomma $index $count}},{{end}}<span class="number"><span class="top">{{$char}}</span><span class="top">🚗</span><span class="bottom">{{$char}}</span><span class="bottom">🚗</span></span>
+  {{- end}}
+  {{- end}}</span>
+{{- end }}
+
 <div id="container">
 
 <div id="numbers">
 <p class="heading">How Many Parking Spaces in NYC?</p>
-<div class="numbers">
-  {{with $count := (printf "%d" .ParkingSpaces | tokenString) -}}
-  {{range $index, $char := $count }}
-  <span class="number"><span class="top">{{$char}}</span><span class="bottom">{{$char}}</span></span>
-  {{end}}
-  {{- end}}
-</div>
+<div class="numbers">{{template "numberblock" .ParkingSpaces}}</div>
 <p class="subtitle">Still too many!</p>
 </div>
 

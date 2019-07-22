@@ -76,6 +76,13 @@ func main() {
 				panic(fmt.Sprintf("unknown type %T for %#v", v, v))
 			}
 		},
+		"iscomma": func(idx int, s []string) bool {
+			l := len(s)
+			if idx > 0 && idx != l && ((l-idx)%3 == 0) {
+				return true
+			}
+			return false
+		},
 	}
 
 	t, err := template.New("index.html").Funcs(funcMap).ParseFiles("templates/index.html")
