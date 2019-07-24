@@ -57,7 +57,7 @@
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span> <br/>
- <small>{{len .PrivateGarages | commify}} Private Detatched Car Garages <span class="badge badge-success">Verified</span><br/>covering {{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
+ <small>{{len .PrivateGarages | commify}} Private Detatched Car Garages <span class="badge badge-success">Verified</span><br/>{{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
@@ -65,7 +65,7 @@
   <div class="card">
     <div class="card-body p-2">
  <strong>{{.ParkingLot.EstimateSpaces .DCA.EstimateLotSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span><br/>
- <small>{{len .ParkingLot | commify}} Parking Lots <span class="badge badge-success">Verified</span><br/>covering {{(millionsqft .ParkingLot.SurfaceArea)| commify}} million sqft <span class="badge badge-success">Verified</span></small>
+ <small>{{len .ParkingLot | commify}} Parking Lots <span class="badge badge-success">Verified</span><br/>{{(millionsqft .ParkingLot.SurfaceArea)| commify}} million sqft <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
