@@ -89,7 +89,7 @@
 
 <div class="row">
   <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
-<table class="table table-sm table-dark recent-changes" >
+<table class="table table-sm table-dark recent-changes" id="recent-changes" />
 <thead>
 <tr>
   <th>Date</th>
@@ -101,17 +101,22 @@
 </tr>
 </thead>
 <tbody>
-{{range .RecentChanges}}
-<tr>
-  <td class="date">{{ if .Future }}<i>Planned</i><br/><small>({{.EffectiveDate.Format "Jan 2006"}})</small>{{else}}{{.EffectiveDate.Format "Jan 02 2006"}}{{ end}}</td>
-  <td class="spaces"><strong class="{{if gt .Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt .Spaces 0}}+{{end}}{{.Spaces}}</strong></td>
-  <td class="category">{{.Category}}</td>
-  <td class="desc">{{if .ReferenceURL}}<a href="{{.ReferenceURL}}">{{.Name}}</a>{{else}}{{.Name}}{{end}}{{if .Description}}<br/>{{.Description}}{{end}}</td>
-  <td class="borough">{{.Borough}}</td>
-  <td class="src">{{.Source}}</td>
+{{range $i, $e := .RecentChanges}}
+<tr {{if gt $i 10}}class="hide-row"{{end}}>
+  <td class="date">{{ if $e.Future }}<i>Planned</i><br/><small>({{$e.EffectiveDate.Format "Jan 2006"}})</small>{{else}}{{$e.EffectiveDate.Format "Jan 02 2006"}}{{ end}}</td>
+  <td class="spaces"><strong class="{{if gt $e.Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt $e.Spaces 0}}+{{end}}{{$e.Spaces}}</strong></td>
+  <td class="category">{{$e.Category}}</td>
+  <td class="desc">{{if $e.ReferenceURL}}<a href="{{$e.ReferenceURL}}">{{$e.Name}}</a>{{else}}{{$e.Name}}{{end}}{{if $e.Description}}<br/>{{$e.Description}}{{end}}</td>
+  <td class="borough">{{$e.Borough}}</td>
+  <td class="src">{{$e.Source}}</td>
 </tr>
 {{end}}
 </tbody>
+{{if gt (len .RecentChanges) 10}}
+<tfoot id="tfoot">
+  <tr><th colspan="6" class="text-center"><a href="#" id="showmore">Show More Recent Parking Changes</a></th></tr>
+</tfoot>
+{{end}}
 </table>
 </div>
 </div>
@@ -119,14 +124,14 @@
 
 <div class="row">
 <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-sm-10 offset-sm-1">
-<h3>Grading</h3>
+<h3 id="grading">Grading</h3>
 <p><span class="badge badge-success">Verified</span> - Based on Open Data and correctness managed by a NYC agency.</p>
 <p><span class="badge badge-warning">Estimate</span> - A reproducible mathmatical estimate based on other known  data.</p>
 <p><span class="badge badge-danger">Guess</span> - An unverified guess or unsubstantiated claim that can't be reproduced.</p>
 
 <h3>Data Sources:</h3>
 
-<div class="card mb-3">
+<div class="card mb-3" id="on-street-parking">
   <div class="card-header">
     On-Street Parking &mdash; <strong>{{.OnStreet.EstimateSpaces | commify}}</strong> spaces <span class="badge badge-danger">Guess</span>
   </div>
@@ -139,7 +144,7 @@ about three million.” when asked how free parking spaces are in NYC. This numb
   </div>
 </div>
 
-<div class="card mb-3">
+<div class="card mb-3" id="municipal-garages">
   <div class="card-header">
     Municipal Parking Grages Parking &mdash; <strong>{{.MunicipalGarages.Spaces | commify}}</strong> spaces <span class="badge badge-success">Verified</span>
   </div>
@@ -150,7 +155,7 @@ about three million.” when asked how free parking spaces are in NYC. This numb
 </div>
 
 
-<div class="card mb-3">
+<div class="card mb-3" id="dca-garages">
   <div class="card-header">
    DCA Licensed Parking Grage / Lot &mdash; <strong>{{.DCA.Spaces | commify}}</strong> spaces <span class="badge badge-success">Verified</span>
   </div>
@@ -160,7 +165,7 @@ about three million.” when asked how free parking spaces are in NYC. This numb
 </div>
 
 
-<div class="card mb-3">
+<div class="card mb-3" id="private-garages">
   <div class="card-header">
    Private Detatched Car Garages &mdash; <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> spaces <span class="badge badge-warning">Estimate</span>
   </div>
@@ -175,7 +180,7 @@ about three million.” when asked how free parking spaces are in NYC. This numb
 </div>
 
 
-<div class="card mb-3">
+<div class="card mb-3" id="parking-lots">
   <div class="card-header">
    Parking Lots &mdash; <strong>{{.ParkingLot.EstimateSpaces .DCA.EstimateLotSpaces | commify}}</strong> spaces <span class="badge badge-warning">Estimate</span>
   </div>
@@ -190,7 +195,7 @@ about three million.” when asked how free parking spaces are in NYC. This numb
   </div>
 </div>
 
-<div class="card mb-3">
+<div class="card mb-3" id="driveways">
   <div class="card-header">
    Driveways &mdash; <strong>{{.Driveways.GuessSpaces | commify}}</strong> spaces <span class="badge badge-danger">Guess</span>
   </div>
@@ -215,5 +220,17 @@ about three million.” when asked how free parking spaces are in NYC. This numb
 </div>
 
 </div>
+<script>
+document.getElementById("showmore").addEventListener("click", function(e){
+  var event = e || window.event;
+  event.preventDefault();
+  var els = document.getElementsByClassName("hide-row");
+  for (var i = 0; i < els.length; i++) {
+    els[i].className = "";
+  }
+  document.getElementById("tfoot").style['display'] = 'none';
+});
+
+</script>
 </body>
 </html>

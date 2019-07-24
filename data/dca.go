@@ -30,11 +30,15 @@ func (d DCALicense) addressKey() string {
 }
 
 func (d DCALicense) Change() Change {
+	src := fmt.Sprintf("License %s", d.LicenseNumber)
 	dt := d.Creation
 	s := d.Spaces()
 	if d.LicenseStatus == "Inactive" {
 		dt = d.Expiration
 		s = -1 * s
+		src = fmt.Sprintf("Expired License %s (%s)", d.LicenseNumber, d.Creation.Format("2006"))
+	} else {
+		src = "New " + src
 	}
 	n := d.BusinessName
 	if d.BusinessName2 != "" {
@@ -48,7 +52,7 @@ func (d DCALicense) Change() Change {
 		Category:      d.Industry,
 		Name:          n,
 		Description:   addr,
-		Source:        fmt.Sprintf("DCA License %s", d.LicenseNumber),
+		Source:        src,
 		ReferenceURL:  fmt.Sprintf("https://www.google.com/maps/place/%s", strings.ReplaceAll(fmt.Sprintf("%s, %s, NY", addr, d.Borough), " ", "+")),
 	}
 }
