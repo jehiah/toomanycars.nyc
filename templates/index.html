@@ -32,47 +32,50 @@
 <div class="row">
 <div class="col-sm-12"><p class="text-center">Where does all that parking come from?</p></div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-3 parking-subtotal">
-  <div class="card">
-    <div class="card-body p-2">
- <strong>{{.OnStreet.EstimateSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
- <small>On-Street Parking</small>
-   </div>
+  <div class="card card-sm">
+    <div class="card-header">On-Street Parking</div>
+    <div class="card-body p-2"><strong>{{.OnStreet.EstimateSpaces | commify}} <span class="badge badge-danger">Guess</span></strong></div>
  </div>
 </div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 parking-subtotal">
-  <div class="card">
+  <div class="card card-sm">
+    <div class="card-header">Municipal Parking</div>
     <div class="card-body p-2">
  <strong>{{.MunicipalGarages.Spaces | commify}}</strong> <span class="badge badge-success">Verified</span><br/>
- <small>{{len .MunicipalGarages | commify}} Municipal Grages <span class="badge badge-success">Verified</span></small>
+ <small>{{len .MunicipalGarages | commify}} Grages <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 parking-subtotal">
-  <div class="card">
+  <div class="card card-sm">
+    <div class="card-header">Licensed Garage / Lot</div>
     <div class="card-body p-2">
  <strong>{{.DCA.Spaces | commify}}</strong> <span class="badge badge-success">Verified</span><br/>
- <small>{{len .DCA | commify }} DCA Licensed<br/>Parking Grage / Lot <span class="badge badge-success">Verified</span></small>
+ <small>{{len .DCA | commify }} Active <abbr title="Department of Consumer Affairs">DCA</abbr> Licenses <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-3 parking-subtotal">
-  <div class="card">
+  <div class="card card-sm">
+    <div class="card-header">Private Detached Garage</div>
     <div class="card-body p-2">
  <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span> <br/>
- <small>{{len .PrivateGarages | commify}} Private Detatched Car Garages <span class="badge badge-success">Verified</span><br/>{{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
+ <small>{{len .PrivateGarages | commify}} Garages <span class="badge badge-success">Verified</span><br/>{{(millionsqft .PrivateGarages.SurfaceArea) | commify}} million sqft <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 parking-subtotal">
-  <div class="card">
+  <div class="card card-sm">
+    <div class="card-header">Parking Lot</div>
     <div class="card-body p-2">
  <strong>{{.ParkingLot.EstimateSpaces .DCA.EstimateLotSpaces | commify}}</strong> <span class="badge badge-warning">Estimate</span><br/>
- <small>{{len .ParkingLot | commify}} Parking Lots <span class="badge badge-success">Verified</span><br/>{{(millionsqft .ParkingLot.SurfaceArea)| commify}} million sqft <span class="badge badge-success">Verified</span></small>
+ <small>{{len .ParkingLot | commify}} Lots <span class="badge badge-success">Verified</span><br/>{{(millionsqft .ParkingLot.SurfaceArea)| commify}} million sqft <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 parking-subtotal">
-  <div class="card">
+  <div class="card card-sm">
+    <div class="card-header">Driveways</div>
     <div class="card-body p-2">
  <strong>{{.Driveways.GuessSpaces | commify}}</strong> <span class="badge badge-danger">Guess</span> <br/>
  <small>{{.Driveways.GuessCount | commify}} Driveways <span class="badge badge-danger">Guess</span></small>
@@ -169,7 +172,7 @@ about three million.” when asked how free parking spaces are in NYC. This numb
 
 <div class="card mb-3" id="private-garages">
   <div class="card-header">
-   Private Detatched Car Garages &mdash; <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> spaces <span class="badge badge-warning">Estimate</span>
+   Private Detached Car Garages &mdash; <strong>{{.PrivateGarages.EstimateSpaces | commify}}</strong> spaces <span class="badge badge-warning">Estimate</span>
   </div>
   <div class="card-body">
     <p class="card-text">Data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh">Planimetrics Building Footprints</a>.</p>

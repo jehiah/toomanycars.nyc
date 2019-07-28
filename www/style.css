@@ -246,6 +246,9 @@ body {
 .hide-row {
 	display:none;
 }
+.card-sm .card-header {
+	padding:.25rem .5rem;
+}
 @media (max-width: 575.98px) {
 	#numbers {
 		margin-top:50px;
