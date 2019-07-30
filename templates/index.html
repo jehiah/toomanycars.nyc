@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous" />
     <meta property="og:url" content="https://toomanycars.nyc/" />
     <link rel="shortcut icon" type="image/png" href="favicon.png">
     <link type="text/plain" rel="author" href="/humans.txt" />
@@ -87,13 +86,7 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-12">
-<p class="text-center">See something missing? <a href="https://on.jehiah.cz/2xVUmq6">Submit an Update</a>. Last updated {{.Updated.Format "Jan 02 2006"}}.</p>
-<p class="text-center">by <a href="https://jehiah.cz/">Jehiah</a></p>
-  </div>
-</div>
-
-<div class="row">
+  <div class="col-sm-12"><h2 class="text-center">Which Boroughs Have Too Much Parking?</h2><p class="text-center">Hint: All of them!</p></div>
   <div class="col-sm-12 col-xl-6 offset-xl-3 col-lg-10 offset-lg-1">
     <div class="card">
     <div class="card-body">
@@ -156,6 +149,13 @@
 {{end}}
 </table>
 </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+<p class="text-center">See something missing? <a href="https://on.jehiah.cz/2xVUmq6">Submit an Update</a>. Last updated {{.Updated.Format "Jan 02 2006"}}.</p>
+<p class="text-center">by <a href="https://jehiah.cz/">Jehiah</a></p>
+  </div>
 </div>
 
 
@@ -221,9 +221,7 @@ about three million.” when asked how free parking spaces are in NYC. This numb
   <div class="card-header">
    Parking Lots &mdash; <strong>{{.ParkingLot.EstimateSpaces .DCA.EstimateLotSpaces | commify}}</strong> spaces <span class="badge badge-warning">Estimate</span>
   </div>
-  <div class="card-body" style="padding-right:30%;">
-  <div class="card-right" id="parking-lot-map" style="position:absolute; right:0;height:100%;width:30%;padding-bottom:1rem;">this goes here</div>
-
+  <div class="card-body">
     <p class="card-text">Data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d">Planimetrics basemap with Parking Lot features</a>.</p>
 
     <p class="card-text">
@@ -271,56 +269,6 @@ document.getElementById("showmore").addEventListener("click", function(e){
 });
 
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
-<script>
-     // Initialize the map, with center and zoom
-      var map = L.map('parking-lot-map', {
-        center: [40.671862, -73.938313],
-        zoom: 9,
-      });
 
-      // Add link to view code on GitHub
-      map.attributionControl
-        .setPrefix('View <a href="https://github.com/datavizforall/leaflet-socrata">code on GitHub</a> with <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'); 
-
-      // // Add legend control layers - global variable with (null, null)
-      // // allows indiv basemaps and overlays to be added inside functions below
-      // var controlLayers = L.control.layers(null, null, {
-      //   position: 'topright',
-      //   collapsed: false // false = open by default
-      // }).addTo(map);
-
-
-      /* BASELAYERS */
-
-      var lightAll = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-      }).addTo(map); // Adds layer by default
-
-      // controlLayers.addBaseLayer(lightAll, 'Gray streets (Carto)');
-
-      /* OVERLAYS */
-
-      // $.getJSON("https://data.ct.gov/resource/v4tt-nt9n.geojson?&$$app_token=QVVY3I72SVPbxBYlTM8fA7eet", function(data)
-      $.getJSON("https://data.cityofnewyork.us/resource/7cgt-uhhz.geojson?$limit=50000&$$app_token=8oTSwF10MKzyyr7WcaCRre6hQ", function(data) {
-        var geoJsonLayer = L.geoJson(data, {
-          style: function (feature) {
-            return {color:"#00f", fill:true, fillColor:"#f00"}
-          }
-          // pointToLayer: function(feature, latlng) {
-          //   return L.marker(latlng, {
-          //     icon: L.icon({
-          //       iconUrl: 'images/school-material-icon.png',
-          //       iconSize: [16, 16],
-          //       iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
-          //     })
-          //   }).setOpacity(0.5).bindTooltip(feature.properties.name + '<br>' + feature.properties.district_name); // replace last term with property data labels to display from GeoJSON file
-          // }
-        }).addTo(map); // Display layer by default
-      });
-
-
-    </script>
 </body>
 </html>

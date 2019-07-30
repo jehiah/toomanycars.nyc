@@ -2,7 +2,9 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
+	"log"
 	"math"
 	"os"
 	"strconv"
@@ -12,8 +14,8 @@ import (
 )
 
 type ParkingLot struct {
-	Type                 string           `json:"type"`
-	Geometry             geojson.Geometry `json:"geometry"`
+	Type                 string            `json:"type"`
+	Geometry             *geojson.Geometry `json:"geometry"`
 	ParkingLotProperties `json:"properties"`
 }
 type ParkingLotProperties struct {
@@ -22,22 +24,26 @@ type ParkingLotProperties struct {
 	ShapeLength float64 `json:"shape_length"`
 	ShapeArea   float64 `json:"shape_area"`
 }
-type ParkingLots []ParkingLot
+type ParkingLots []*ParkingLot
 
 func (p ParkingLots) Filter(b Borough) ParkingLots {
 	var o ParkingLots
 Loop:
 	for _, pp := range p {
-		for _, b := range Boroughs {
-			for _, subshape := range b.Polygon {
-				if planar.PolygonContains(subshape, pp.Geometry.Geometry().Bound().Center()) {
-					o = append(o, pp)
-					continue Loop
-				}
+		if pp.Geometry == nil {
+			log.Fatalf("nil Geometry %#v", pp)
+		}
+		center := pp.Geometry.Geometry().Bound().Center()
+		for _, subshape := range b.Polygon {
+			if planar.PolygonContains(subshape, center) {
+				// log.Printf("%s[%d] contains %s at %#v", b.Name, i, pp.ID, center)
+				o = append(o, pp)
+				continue Loop
 			}
 		}
+		// log.Printf("%s not contained in %s", pp.ID, b.Name)
 	}
-	return p
+	return o
 }
 
 func (p ParkingLots) SurfaceArea() (total float64) {
@@ -62,8 +68,27 @@ func (p ParkingLot) EstimateSpaces() int {
 	return int(math.Floor(estimate))
 }
 
+func (g *ParkingLot) UnmarshalJSON(b []byte) error {
+	type tempType struct {
+		Type                 string            `json:"type"`
+		Geometry             *geojson.Geometry `json:"geometry"`
+		ParkingLotProperties json.RawMessage   `json:"properties"`
+	}
+	var data tempType
+	err := json.Unmarshal(b, &data)
+	if err != nil {
+		return err
+	}
+	if g == nil {
+		g = &ParkingLot{}
+	}
+	(*g).Type = data.Type
+	(*g).Geometry = data.Geometry
+	return json.Unmarshal(data.ParkingLotProperties, &g.ParkingLotProperties)
+}
+
 // UnmarshalJSON converts shape_leng, shape_area into float64
-func (p *ParkingLot) UnmarshalJSON(b []byte) error {
+func (p *ParkingLotProperties) UnmarshalJSON(b []byte) error {
 	type tempType struct {
 		SourceID    string `json:"source_id"`
 		Status      string `json:"status"`
@@ -76,29 +101,32 @@ func (p *ParkingLot) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	if p == nil {
-		p = &ParkingLot{}
+		p = &ParkingLotProperties{}
 	}
 	p.ID = data.SourceID
 	p.Status = data.Status
 	p.ShapeLength, err = strconv.ParseFloat(data.ShapeLength, 64)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s for %#v %s", err, data, string(b))
 	}
 	p.ShapeArea, err = strconv.ParseFloat(data.ShapeArea, 64)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s for %#v %s", err, data, string(b))
 	}
 	return nil
 }
 
 func ParseDOITTParkingLot(r io.Reader) (ParkingLots, error) {
-	var o []ParkingLot
+	type FeatureCollection struct {
+		Features []*ParkingLot `json:"features"`
+	}
+	var o FeatureCollection
 	err := json.NewDecoder(r).Decode(&o)
 	if err != nil {
 		return nil, err
 	}
-
-	return o, nil
+	log.Printf("Lot: %#v", o.Features[0])
+	return o.Features, nil
 }
 
 func ParseDOITTParkingLotFromFile(file string) (ParkingLots, error) {

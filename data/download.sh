@@ -11,8 +11,8 @@ DATASET=w7w3-xahh
 
 FIELDS=license_nbr,license_status,license_creation_date,lic_expir_dd,industry,business_name,business_name_2,address_building,address_street_name,address_borough,detail_2
 WHERE="industry='Garage%20and%20Parking%20Lot'%20OR%20industry='Parking%20Lot'%20OR%20industry='Garage'"
-echo "https://data.cityofnewyork.us/resource/${DATASET}.json?\$where=${WHERE}&\$select=${FIELDS}&\$order=license_creation_date%20ASC\$limit=5000"
 
+echo "downloading dca_licenses_tmp.json"
 curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$where=${WHERE}&\$select=${FIELDS}&\$order=license_creation_date%20ASC&\$limit=5000" --silent  > dca_licenses_tmp.json
 
 # reformat to one line per record
@@ -37,7 +37,7 @@ if [ ! -f DOITT_planimetrics_parking_lot.json ]; then
 fi
 if [ ! -f DOITT_planimetrics_parking_lot.geojson ]; then
 	echo "downloading DOITT_planimetrics_parking_lot.geojson"
-	curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$select=${FIELDS},the_geom&\$limit=200000" --silent  > DOITT_planimetrics_parking_lot.geojson
+	curl "https://data.cityofnewyork.us/resource/${DATASET}.geojson?\$select=${FIELDS},the_geom&\$limit=200000" --silent  > DOITT_planimetrics_parking_lot.geojson
 fi
 
 

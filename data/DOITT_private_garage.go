@@ -3,14 +3,16 @@ package data
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"os"
 
 	"github.com/paulmach/orb/geojson"
+	"github.com/paulmach/orb/planar"
 )
 
 type Garage struct {
-	Type             string           `json:"type"`
-	Geometry         geojson.Geometry `json:"geometry"`
+	Type             string            `json:"type"`
+	Geometry         *geojson.Geometry `json:"geometry"`
 	GarageProperties `json:"properties"`
 }
 type GarageProperties struct {
@@ -19,7 +21,26 @@ type GarageProperties struct {
 	FeatCode  string  `json:"feat_code"`
 	ShapeArea float64 `json:"shape_area"`
 }
-type Garages []Garage
+type Garages []*Garage
+
+func (g *Garage) UnmarshalJSON(b []byte) error {
+	type tempType struct {
+		Type             string            `json:"type"`
+		Geometry         *geojson.Geometry `json:"geometry"`
+		GarageProperties json.RawMessage   `json:"properties"`
+	}
+	var data tempType
+	err := json.Unmarshal(b, &data)
+	if err != nil {
+		return err
+	}
+	if g == nil {
+		g = &Garage{}
+	}
+	(*g).Type = data.Type
+	(*g).Geometry = data.Geometry
+	return json.Unmarshal(data.GarageProperties, &g.GarageProperties)
+}
 
 func (g *GarageProperties) UnmarshalJSON(b []byte) error {
 	type localType GarageProperties
@@ -40,9 +61,21 @@ func (g *GarageProperties) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (g Garages) Filter(b Borough) Garages {
-	// TODO: implement
-	return g
+func (p Garages) Filter(b Borough) Garages {
+	var o Garages
+Loop:
+	for _, pp := range p {
+		center := pp.Geometry.Geometry().Bound().Center()
+		for _, subshape := range b.Polygon {
+			if planar.PolygonContains(subshape, center) {
+				// log.Printf("%s[%d] contains %s at %#v", b.Name, i, pp.ID, center)
+				o = append(o, pp)
+				continue Loop
+			}
+		}
+		// log.Printf("%s not contained in %s", pp.ID, b.Name)
+	}
+	return o
 }
 
 func (g Garages) SurfaceArea() (total float64) {
@@ -180,14 +213,14 @@ func (g Garage) EstimateSpaces() int {
 
 func ParseDOITTGarages(r io.Reader) (Garages, error) {
 	type FeatureCollection struct {
-		Features []Garage `json:"features"`
+		Features []*Garage `json:"features"`
 	}
 	var o FeatureCollection
 	err := json.NewDecoder(r).Decode(&o)
 	if err != nil {
 		return nil, err
 	}
-
+	log.Printf("Garage: %#v", o.Features[0])
 	return o.Features, nil
 }
 

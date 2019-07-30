@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"os"
 
 	"github.com/paulmach/orb"
@@ -15,8 +16,8 @@ type Borough struct {
 }
 
 type BoroughGeoJSON struct {
-	Type       string           `json:"type"`
-	Geometry   geojson.Geometry `json:"geometry"`
+	Type       string            `json:"type"`
+	Geometry   *geojson.Geometry `json:"geometry"`
 	Properties struct {
 		Name string `json:"borough"`
 	} `json:"properties"`
@@ -44,6 +45,7 @@ func LoadBoroughGeoJSON(r io.Reader) error {
 			}
 		}
 	}
+	log.Printf("Borough: Manhattan:%#v", Manhattan.Polygon[0])
 	return nil
 }
 

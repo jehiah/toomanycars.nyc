@@ -123,6 +123,7 @@ func main() {
 		log.Fatal(err)
 	}
 	est, _ := time.LoadLocation("America/New_York")
+	log.Print("rendering www/index.html")
 	err = t.ExecuteTemplate(w, "index.html", Data{
 		OnStreet:         curbParking,
 		DCA:              dca,
