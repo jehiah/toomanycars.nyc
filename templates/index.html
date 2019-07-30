@@ -97,7 +97,8 @@
           </tr>
       </thead>
       <tbody>
-        <tr><th>On-Street Parking</th>{{ range .Boroughs}}<td class="spaces">?</td>{{end}}<td class="spaces">{{.OnStreet.EstimateSpaces | commify}}</td></tr>
+        {{$os := .OnStreet}}
+        <tr><th>On-Street Parking</th>{{ range $i, $borough := .Boroughs}}<td class="spaces">{{($os.Filter $borough).EstimateSpaces | commify}}</td>{{end}}<td class="spaces">{{.OnStreet.EstimateSpaces | commify}}</td></tr>
         {{$dca := .DCA}}
         <tr><th>Licensed Garage / Lot</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{($dca.Filter $borough).Spaces | commify}}</td>{{end}}<td class="spaces">{{$dca.Spaces | commify}}</td></tr>
         {{$mun := .MunicipalGarages}}

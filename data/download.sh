@@ -49,7 +49,7 @@ fi
 # https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh
 # https://dev.socrata.com/foundry/data.cityofnewyork.us/6kx9-25sv
 DATASET=nqwf-w8eh
-DATASET=n844-bmia
+DATASET=xra2-rhxp
 FIELDS="doitt_id,bin,feat_code,shape_area"
 WHERE="feat_code=5110"
 if [ ! -f DOITT_planimetrics_building_garages.json ]; then

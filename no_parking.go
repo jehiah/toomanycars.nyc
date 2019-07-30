@@ -15,7 +15,7 @@ import (
 )
 
 type Data struct {
-	OnStreet         data.Changes
+	OnStreet         data.OnStreet
 	DCA              data.DCALicenses
 	ParkingLot       data.ParkingLots
 	PrivateGarages   data.Garages
@@ -27,7 +27,7 @@ type Data struct {
 
 func (d Data) RecentChanges() data.Changes {
 	var o data.Changes
-	o = d.OnStreet
+	o = d.OnStreet.Changes
 	o = append(o, d.DCA.RecentChanges()...)
 	sort.Slice(o, func(i, j int) bool {
 		if o[i].EffectiveDate.Equal(o[j].EffectiveDate) {
