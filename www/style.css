@@ -8,7 +8,8 @@ body {
 
 #numbers {
     text-align:center;
-    margin-top:100px;
+    margin-top: 5rem;
+	margin-bottom: 3rem;
 	font-size:70px;
 }
 
@@ -192,16 +193,11 @@ body {
   z-index: -1;
 }
 
-.heading {
-    color:#bbb;
-    margin:50px;
-    font-size:24pt;
-    font-family:Helvetica;
+h1, h2, h3, h4 {
+ font-family:Helvetica;
 }
 .subtitle {
-    color:#bbb;
-    margin:25px;
-    font-size:20pt;
+    font-size: 1.5rem;
     font-family:Helvetica;
 }
 .table {
@@ -240,7 +236,13 @@ body {
 .recent-changes > tbody > tr > td.src {
 	font-size:70%;
 }
+.byborough > tbody > tr > td.spaces {
+	text-align:right;
+}
 .card {
+	color:#212529;
+}
+.card .table {
 	color:#212529;
 }
 .hide-row {
@@ -253,12 +255,6 @@ body {
 	#numbers {
 		margin-top:50px;
 		font-size:50px;
-	}
-	.heading {
-		margin:35px 50px;
-	}
-	.subtitle {
-		margin:10px 25px 20px 25px;
 	}
 	.table-sm {
 		font-size:90%;

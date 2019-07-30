@@ -4,17 +4,25 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+
+	"github.com/paulmach/orb/geojson"
 )
 
 type Garage struct {
+	Type             string           `json:"type"`
+	Geometry         geojson.Geometry `json:"geometry"`
+	GarageProperties `json:"properties"`
+}
+type GarageProperties struct {
 	DoittID   string  `json:"doitt_id"`
 	Bin       string  `json:"bin"`
 	FeatCode  string  `json:"feat_code"`
 	ShapeArea float64 `json:"shape_area"`
 }
+type Garages []Garage
 
-func (g *Garage) UnmarshalJSON(b []byte) error {
-	type localType Garage
+func (g *GarageProperties) UnmarshalJSON(b []byte) error {
+	type localType GarageProperties
 	type tempType struct {
 		ShapeArea StrFloat64 `json:"shape_area"`
 		localType
@@ -25,14 +33,17 @@ func (g *Garage) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	if g == nil {
-		g = &Garage{}
+		g = &GarageProperties{}
 	}
-	*g = Garage(data.localType)
+	*g = GarageProperties(data.localType)
 	g.ShapeArea = float64(data.ShapeArea)
 	return nil
 }
 
-type Garages []Garage
+func (g Garages) Filter(b Borough) Garages {
+	// TODO: implement
+	return g
+}
 
 func (g Garages) SurfaceArea() (total float64) {
 	for _, gg := range g {
@@ -168,13 +179,16 @@ func (g Garage) EstimateSpaces() int {
 }
 
 func ParseDOITTGarages(r io.Reader) (Garages, error) {
-	var o []Garage
+	type FeatureCollection struct {
+		Features []Garage `json:"features"`
+	}
+	var o FeatureCollection
 	err := json.NewDecoder(r).Decode(&o)
 	if err != nil {
 		return nil, err
 	}
 
-	return o, nil
+	return o.Features, nil
 }
 
 func ParseDOITTGaragesFromFile(file string) (Garages, error) {

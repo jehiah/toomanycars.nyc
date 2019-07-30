@@ -21,6 +21,7 @@ type Data struct {
 	PrivateGarages   data.Garages
 	MunicipalGarages data.MunicipalGarages
 	Driveways        data.Driveways
+	Boroughs         []*data.Borough
 	Updated          time.Time
 }
 
@@ -89,6 +90,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	if err = data.LoadBoroughGeoJSONFromFile("data/borough_boundaries.geojson"); err != nil {
+		log.Fatal(err)
+	}
+
 	curbParking, err := data.ParseCurbChangesFromFile("data/curb_changes.csv")
 	if err != nil {
 		log.Fatal(err)
@@ -97,11 +103,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	doittParkingLot, err := data.ParseDOITTParkingLotFromFile("data/DOITT_planimetrics_parking_lot.json")
+	doittParkingLot, err := data.ParseDOITTParkingLotFromFile("data/DOITT_planimetrics_parking_lot.geojson")
 	if err != nil {
 		log.Fatal(err)
 	}
-	doittPrivateGarages, err := data.ParseDOITTGaragesFromFile("data/DOITT_planimetrics_building_garages.json")
+	doittPrivateGarages, err := data.ParseDOITTGaragesFromFile("data/DOITT_planimetrics_building_garages.geojson")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -125,6 +131,7 @@ func main() {
 		MunicipalGarages: data.AllMunicipalGarages,
 		Driveways:        data.DrivewayGuess,
 		Updated:          time.Now().In(est),
+		Boroughs:         data.Boroughs,
 	})
 	if err != nil {
 		log.Fatal(err)

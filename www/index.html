@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous" />
     <meta property="og:url" content="https://toomanycars.nyc/" />
     <link rel="shortcut icon" type="image/png" href="favicon.png">
     <link type="text/plain" rel="author" href="/humans.txt" />
@@ -17,14 +18,14 @@
 <div id="container">
 
 <div id="numbers">
-<p class="heading">How Many Parking Spaces in NYC?</p>
-<div class="numbers"><span class="numbers"><span class="number"><span class="top">5</span><span class="top">🚗</span><span class="bottom">5</span><span class="bottom">🚗</span></span>,<span class="number"><span class="top">3</span><span class="top">🚗</span><span class="bottom">3</span><span class="bottom">🚗</span></span><span class="number"><span class="top">8</span><span class="top">🚗</span><span class="bottom">8</span><span class="bottom">🚗</span></span><span class="number"><span class="top">8</span><span class="top">🚗</span><span class="bottom">8</span><span class="bottom">🚗</span></span>,<span class="number"><span class="top">8</span><span class="top">🚗</span><span class="bottom">8</span><span class="bottom">🚗</span></span><span class="number"><span class="top">6</span><span class="top">🚗</span><span class="bottom">6</span><span class="bottom">🚗</span></span><span class="number"><span class="top">8</span><span class="top">🚗</span><span class="bottom">8</span><span class="bottom">🚗</span></span></span></div>
+<h1 class="text-center">How Many Parking Spaces in NYC?</h1>
+<div class="numbers"><span class="numbers"><span class="number"><span class="top">5</span><span class="top">🚗</span><span class="bottom">5</span><span class="bottom">🚗</span></span>,<span class="number"><span class="top">2</span><span class="top">🚗</span><span class="bottom">2</span><span class="bottom">🚗</span></span><span class="number"><span class="top">2</span><span class="top">🚗</span><span class="bottom">2</span><span class="bottom">🚗</span></span><span class="number"><span class="top">8</span><span class="top">🚗</span><span class="bottom">8</span><span class="bottom">🚗</span></span>,<span class="number"><span class="top">3</span><span class="top">🚗</span><span class="bottom">3</span><span class="bottom">🚗</span></span><span class="number"><span class="top">6</span><span class="top">🚗</span><span class="bottom">6</span><span class="bottom">🚗</span></span><span class="number"><span class="top">7</span><span class="top">🚗</span><span class="bottom">7</span><span class="bottom">🚗</span></span></span></div>
 <p class="subtitle">Still too many!</p>
 </div>
 
 
 <div class="row">
-<div class="col-sm-12"><p class="text-center">Where does all that parking come from?</p></div>
+<div class="col-sm-12"><h2 class="text-center">Where does all that parking come from?</h2></div>
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-3 parking-subtotal">
   <div class="card card-sm">
     <div class="card-header">On-Street Parking</div>
@@ -53,8 +54,8 @@
   <div class="card card-sm">
     <div class="card-header">Private Detached Garage</div>
     <div class="card-body p-2">
- <strong>375,840</strong> <span class="badge badge-warning">Estimate</span> <br/>
- <small>215,339 Garages <span class="badge badge-success">Verified</span><br/>77.8 million sqft <span class="badge badge-success">Verified</span></small>
+ <strong>215,339</strong> <span class="badge badge-warning">Estimate</span> <br/>
+ <small>215,339 Garages <span class="badge badge-success">Verified</span><br/>0.0 million sqft <span class="badge badge-success">Verified</span></small>
    </div>
  </div>
 </div>
@@ -81,10 +82,41 @@
 
 <div class="row">
   <div class="col-sm-12">
-<p class="text-center">See something missing? <a href="https://on.jehiah.cz/2xVUmq6">Submit an Update</a>. Last updated Jul 28 2019.</p>
+<p class="text-center">See something missing? <a href="https://on.jehiah.cz/2xVUmq6">Submit an Update</a>. Last updated Jul 29 2019.</p>
 <p class="text-center">by <a href="https://jehiah.cz/">Jehiah</a></p>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-sm-12 col-xl-6 offset-xl-3 col-lg-10 offset-lg-1">
+    <div class="card">
+    <div class="card-body">
+      <table class="table table-sm byborough" id="byborough">
+      <thead>
+          <tr>
+            <th></th><th class="text-right">Manhattan</th><th class="text-right">Brooklyn</th><th class="text-right">Bronx</th><th class="text-right">Queens</th><th class="text-right">Staten Island</th><th class="text-right">Total</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr><th>On-Street Parking</th><td class="spaces">?</td><td class="spaces">?</td><td class="spaces">?</td><td class="spaces">?</td><td class="spaces">?</td><td class="spaces">2,999,413</td></tr>
+        
+        <tr><th>Licensed Garage / Lot</th><td class="spaces">148,210</td><td class="spaces">31,051</td><td class="spaces">56,688</td><td class="spaces">47,986</td><td class="spaces">2,902</td><td class="spaces">292,884</td></tr>
+        
+        <tr><th>Municipal Parking</th><td class="spaces">356</td><td class="spaces">1,685</td><td class="spaces">1,117</td><td class="spaces">3,745</td><td class="spaces">1,080</td><td class="spaces">7,983</td></tr>
+        
+        <tr><th>Private Detached Garage</th><td class="spaces">215,339</td><td class="spaces">215,339</td><td class="spaces">215,339</td><td class="spaces">215,339</td><td class="spaces">215,339</td><td class="spaces">215,339</td></tr>
+        
+        <tr><th>Parking Lot</th><td class="spaces">1,050,625</td><td class="spaces">1,059,089</td><td class="spaces">1,054,523</td><td class="spaces">1,055,933</td><td class="spaces">1,068,561</td><td class="spaces">1,012,748</td></tr>
+        
+        <tr><th>Driveways</th><td class="spaces">700,000</td><td class="spaces">700,000</td><td class="spaces">700,000</td><td class="spaces">700,000</td><td class="spaces">700,000</td><td class="spaces">700,000</td></tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+  </div>
+
+</div>
+
 
 <div class="row">
   <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
@@ -670,12 +702,12 @@ about three million.” when asked how free parking spaces are in NYC. This numb
 
 <div class="card mb-3" id="private-garages">
   <div class="card-header">
-   Private Detached Car Garages &mdash; <strong>375,840</strong> spaces <span class="badge badge-warning">Estimate</span>
+   Private Detached Car Garages &mdash; <strong>215,339</strong> spaces <span class="badge badge-warning">Estimate</span>
   </div>
   <div class="card-body">
     <p class="card-text">Data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh">Planimetrics Building Footprints</a>.</p>
     <p class="card-text">
-        Planimetrics records 215,339 <small><span class="badge badge-success">Verified</span></small> garages covering 77.8 million sqft <small><span class="badge badge-success">Verified</span></small>
+        Planimetrics records 215,339 <small><span class="badge badge-success">Verified</span></small> garages covering 0.0 million sqft <small><span class="badge badge-success">Verified</span></small>
     </p>
     <p class="card-text">Parking spaces estimated at 1 parking space for garages under 285 sqft, 2 spaces for garages 286-470 sqft, 3 spaces for garages 471-600 sqft.</p>
     <p class="card-text">Note: Attached garages are not present in this dataset and not estimated.</p>
@@ -687,7 +719,9 @@ about three million.” when asked how free parking spaces are in NYC. This numb
   <div class="card-header">
    Parking Lots &mdash; <strong>1,012,748</strong> spaces <span class="badge badge-warning">Estimate</span>
   </div>
-  <div class="card-body">
+  <div class="card-body" style="padding-right:30%;">
+  <div class="card-right" id="parking-lot-map" style="position:absolute; right:0;height:100%;width:30%;padding-bottom:1rem;">this goes here</div>
+
     <p class="card-text">Data sourced from NYC Department of Information Technology and Telecommunications (DoITT) via NYC Open Data <a href="https://data.cityofnewyork.us/City-Government/Parking-Lot/h7zy-iq3d">Planimetrics basemap with Parking Lot features</a>.</p>
 
     <p class="card-text">
@@ -735,5 +769,56 @@ document.getElementById("showmore").addEventListener("click", function(e){
 });
 
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+<script>
+     
+      var map = L.map('parking-lot-map', {
+        center: [40.671862, -73.938313],
+        zoom: 9,
+      });
+
+      
+      map.attributionControl
+        .setPrefix('View <a href="https://github.com/datavizforall/leaflet-socrata">code on GitHub</a> with <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'); 
+
+      
+      
+      
+      
+      
+      
+
+
+       
+
+      var lightAll = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+      }).addTo(map); 
+
+      
+
+       
+
+      
+      $.getJSON("https://data.cityofnewyork.us/resource/7cgt-uhhz.geojson?$limit=50000&$$app_token=8oTSwF10MKzyyr7WcaCRre6hQ", function(data) {
+        var geoJsonLayer = L.geoJson(data, {
+          style: function (feature) {
+            return {color:"#00f", fill:true, fillColor:"#f00"}
+          }
+          
+          
+          
+          
+          
+          
+          
+          
+          
+        }).addTo(map); 
+      });
+
+
+    </script>
 </body>
 </html>

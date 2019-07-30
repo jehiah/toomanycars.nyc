@@ -24,6 +24,7 @@ type DCALicense struct {
 	Borough           string `json:"address_borough"`
 	Detail            string `json:"detail_2"` // "Vehicle Spaces: %d, Bicycle Spaces: %d"
 }
+type DCALicenses []DCALicense
 
 func (d DCALicense) addressKey() string {
 	return fmt.Sprintf("%s %s %s", d.AddressBuilding, d.AddressStreetName, d.Borough)
@@ -86,8 +87,6 @@ func (d *DCALicense) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-type DCALicenses []DCALicense
-
 // Spaces parses the Detail field for the number of Vehcile Spaces
 func (d DCALicense) Spaces() int {
 	f := func(c rune) bool {
@@ -147,6 +146,15 @@ func (d DCALicenses) Active() DCALicenses {
 		o = append(o, dd)
 	}
 	return o
+}
+
+func (d DCALicenses) Filter(b Borough) (o DCALicenses) {
+	for _, dd := range d {
+		if dd.Borough == b.Name {
+			o = append(o, dd)
+		}
+	}
+	return
 }
 
 func (d DCALicenses) RecentChanges() Changes {

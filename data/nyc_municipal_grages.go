@@ -13,6 +13,15 @@ type MunicipalGarage struct {
 }
 type MunicipalGarages []MunicipalGarage
 
+func (m MunicipalGarages) Filter(b Borough) (o MunicipalGarages) {
+	for _, mm := range m {
+		if mm.Borough == b.Name {
+			o = append(o, mm)
+		}
+	}
+	return
+}
+
 func (m MunicipalGarages) Spaces() (total int) {
 	for _, mm := range m {
 		total += mm.Spaces

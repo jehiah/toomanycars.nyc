@@ -6,15 +6,39 @@ import (
 	"math"
 	"os"
 	"strconv"
+
+	"github.com/paulmach/orb/geojson"
+	"github.com/paulmach/orb/planar"
 )
 
 type ParkingLot struct {
+	Type                 string           `json:"type"`
+	Geometry             geojson.Geometry `json:"geometry"`
+	ParkingLotProperties `json:"properties"`
+}
+type ParkingLotProperties struct {
 	ID          string  `json:"source_id"`
 	Status      string  `json:"status"`
 	ShapeLength float64 `json:"shape_length"`
 	ShapeArea   float64 `json:"shape_area"`
 }
 type ParkingLots []ParkingLot
+
+func (p ParkingLots) Filter(b Borough) ParkingLots {
+	var o ParkingLots
+Loop:
+	for _, pp := range p {
+		for _, b := range Boroughs {
+			for _, subshape := range b.Polygon {
+				if planar.PolygonContains(subshape, pp.Geometry.Geometry().Bound().Center()) {
+					o = append(o, pp)
+					continue Loop
+				}
+			}
+		}
+	}
+	return p
+}
 
 func (p ParkingLots) SurfaceArea() (total float64) {
 	for _, pp := range p {

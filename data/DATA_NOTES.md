@@ -92,6 +92,7 @@ Certificate of Occupancy Lookup: http://a810-bisweb.nyc.gov/bisweb/bispi00.jsp
 Planimetrics base image
 https://github.com/CityOfNewYork/nyc-geo-metadata
 https://github.com/CityOfNewYork/nyc-geo-metadata/blob/master/Metadata/Metadata_AerialImagery.md
+https://github.com/CityOfNewYork/nyc-planimetrics/blob/master/Capture_Rules.md
 
 
 https://medium.com/the-downlinq/car-localization-and-counting-with-overhead-imagery-an-interactive-exploration-9d5a029a596b
@@ -128,3 +129,24 @@ http://web.mta.info/bandt/html/btintro.html
 Ed Koch 170k, Brooklyn 124k, Williamsburg 111k, Manhattan 75k
 
 
+# NYCHA Parking
+https://www.nychaparking.com/find-a-parking-lot/
+most seem to be covered in the planimetrics; would be a way to get a specific verified number though
+
+
+# Geo
+https://data.cityofnewyork.us/City-Government/Borough-Boundaries/tqmj-j8zm
+http://data.beta.nyc/dataset/nyc-borough-boundaries/resource/7c164faa-4458-4ff2-9ef0-09db00b509ef (simpler)
+
+
+# NYC Department of Parks and Recreation Lots
+-- generally included in planimetrics
+Last updated 2018 - DPR_ParkingLots_001
+https://data.cityofnewyork.us/City-Government/Parking-Lots/e2f7-cs7i
+https://dev.socrata.com/foundry/data.cityofnewyork.us/6njb-jmjq
+
+
+api/views/metadata/v1/6udu-fhnu
+
+# Visualizations
+https://github.com/datavizforall/leaflet-socrata/
