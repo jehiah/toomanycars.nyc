@@ -9,7 +9,6 @@ body {
 #numbers {
     text-align:center;
     margin-top: 5rem;
-	margin-bottom: 3rem;
 	font-size:70px;
 }
 
@@ -195,6 +194,9 @@ body {
 
 h1, h2, h3, h4 {
  font-family:Helvetica;
+}
+h2 {
+	margin-top:2rem;
 }
 .subtitle {
     font-size: 1.5rem;
