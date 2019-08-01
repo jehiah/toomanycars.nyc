@@ -9,8 +9,9 @@ import (
 	"time"
 )
 
-// Based on @Pollytrott testimony at City Council
-const BaseOnStreetParking int = 3000000
+// Based on @Pollytrott testimony at City Council, later clarified as 2.990
+// https://legistar.council.nyc.gov/View.ashx?M=F&ID=7538481&GUID=8A898206-4A26-40E1-B432-036D4B3112A5
+const BaseOnStreetParking int = 2990000
 
 type OnStreet struct {
 	BaseEst int
@@ -19,10 +20,13 @@ type OnStreet struct {
 
 func (s OnStreet) Filter(b Borough) OnStreet {
 	var o OnStreet
-	// These ratios come from https://github.com/jehiah/analyze-nyc-parking-signs
-	// While that process yields a different estimate than DOT publicly stated, 
+	// These ratios come from DOT
+	//
+	//
+	// For comparison ratios from https://github.com/jehiah/analyze-nyc-parking-signs
+	// While that process yields a different estimate than DOT publicly stated,
 	// we can use it's per-borough breakdown
-	// 
+	//
 	// 1595744 total car spaces
 	// 207429 cars manhattan .129988895
 	// 602270 cars broklyn .377422694
@@ -31,15 +35,15 @@ func (s OnStreet) Filter(b Borough) OnStreet {
 	// 105107 cars Staten Island .065867081
 	switch b.Name {
 	case "Manhattan":
-		o.BaseEst = int(float64(s.BaseEst) * 0.129988895)
+		o.BaseEst = int(float64(s.BaseEst) * 0.063545151)
 	case "Bronx":
-		o.BaseEst = int(float64(s.BaseEst) * .153450679)
+		o.BaseEst = int(float64(s.BaseEst) * 0.140468227)
 	case "Brooklyn":
-		o.BaseEst = int(float64(s.BaseEst) * 0.377422694)
+		o.BaseEst = int(float64(s.BaseEst) * 0.247491639)
 	case "Queens":
-		o.BaseEst = int(float64(s.BaseEst) * 0.27327065)
+		o.BaseEst = int(float64(s.BaseEst) * 0.401337793)
 	case "Staten Island":
-		o.BaseEst = int(float64(s.BaseEst) * 0.065867081)
+		o.BaseEst = int(float64(s.BaseEst) * 0.147157191)
 	default:
 		panic("unknown borough")
 	}
