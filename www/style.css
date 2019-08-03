@@ -247,9 +247,14 @@ h2 {
 .byborough > thead > tr> th, .byborough > thead > tr> td {
 	border-top:0;
 }
-.table.byborough {
+.table.byborough, .table.parking-changes {
 	margin-bottom:0;
 }
+.parking-changes > tbody > tr > td.spaces {
+	text-align:right;
+}
+
+
 .card {
 	color:#212529;
 }

@@ -157,6 +157,83 @@ func (d DCALicenses) Filter(b Borough) (o DCALicenses) {
 	return
 }
 
+type GroupedDCALicenses []DCALicenses
+
+func (d DCALicenses) Group() GroupedDCALicenses {
+	skip := make(map[string]string)
+	var skipped []DCALicense
+	for _, e := range replacedLicenses {
+		skip[e.License] = e.ReplacesLicense
+	}
+
+	// group licenses together by address
+	byAddr := make(map[string]DCALicenses)
+	for _, dd := range d {
+		if skip[dd.LicenseNumber] != "" {
+			skipped = append(skipped, dd)
+			continue
+		}
+		key := dd.addressKey()
+		byAddr[key] = append(byAddr[key], dd)
+	}
+
+	// add skipped to the right grouping
+	for _, s := range skipped {
+		target := skip[s.LicenseNumber]
+		for key, dd := range byAddr {
+			var found bool
+			for _, ddd := range dd {
+				if ddd.LicenseNumber == target {
+					found = true
+					break
+				}
+			}
+			if found {
+				byAddr[key] = append(byAddr[key], s)
+				break
+			}
+		}
+	}
+
+	var o []DCALicenses
+	for _, dd := range byAddr {
+		o = append(o, dd)
+	}
+	return o
+}
+
+type GroupChange struct {
+	Added, Removed int
+}
+
+func (g GroupedDCALicenses) ChangesInMonth(t time.Time) GroupChange {
+	y, m, _ := t.Date()
+	var o GroupChange
+	for _, gg := range g {
+		min, max := gg.MinMax()
+		if min.Year() == y && min.Month() == m {
+			o.Added += gg[0].Spaces()
+			continue
+		}
+		if max.Year() == y && max.Month() == m {
+			o.Removed -= gg[0].Spaces()
+		}
+	}
+	return o
+}
+
+func (d DCALicenses) MinMax() (min, max time.Time) {
+	for _, dd := range d {
+		if dd.Creation.Before(min) || min.IsZero() {
+			min = dd.Creation
+		}
+		if dd.Expiration.After(max) || max.IsZero() {
+			max = dd.Expiration
+		}
+	}
+	return
+}
+
 func (d DCALicenses) RecentChanges() Changes {
 	// build skip list
 	skip := make(map[string]bool)

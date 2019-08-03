@@ -125,7 +125,7 @@ func ParseDOITTParkingLot(r io.Reader) (ParkingLots, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Lot: %#v", o.Features[0])
+	log.Printf("Lot: %d shapes loaded", len(o.Features))
 	return o.Features, nil
 }
 

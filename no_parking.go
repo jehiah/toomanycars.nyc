@@ -24,6 +24,7 @@ type Data struct {
 	Boroughs         []*data.Borough
 	Updated          time.Time
 	BoroughCounter   Counter
+	Timeframes       []time.Time
 }
 
 func (d Data) RecentChanges() data.Changes {
@@ -38,6 +39,16 @@ func (d Data) RecentChanges() data.Changes {
 
 	})
 
+	return o
+}
+func RecentTimeframes() []time.Time {
+	var o []time.Time
+	y, m, _ := time.Now().Date()
+	start := time.Date(y, m, 1, 0, 0, 0, 0, time.UTC)
+	for i := 0; i < 12; i++ {
+		t := start.AddDate(0, -1*i, 0)
+		o = append(o, t)
+	}
 	return o
 }
 
@@ -145,6 +156,7 @@ func main() {
 		Updated:          time.Now().In(est),
 		Boroughs:         data.Boroughs,
 		BoroughCounter:   make(Counter),
+		Timeframes:       RecentTimeframes(),
 	})
 	if err != nil {
 		log.Fatal(err)

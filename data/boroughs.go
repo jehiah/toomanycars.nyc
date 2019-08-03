@@ -45,7 +45,7 @@ func LoadBoroughGeoJSON(r io.Reader) error {
 			}
 		}
 	}
-	log.Printf("Borough: Manhattan:%#v", Manhattan.Polygon[0])
+	log.Printf("Borough: %d shapes loaded", len(o))
 	return nil
 }
 

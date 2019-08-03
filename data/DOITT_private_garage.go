@@ -220,7 +220,7 @@ func ParseDOITTGarages(r io.Reader) (Garages, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Garage: %#v", o.Features[0])
+	log.Printf("Garage: %d shapes loaded", len(o.Features))
 	return o.Features, nil
 }
 
