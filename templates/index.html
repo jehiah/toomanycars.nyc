@@ -93,23 +93,27 @@
       <table class="table table-sm byborough" id="byborough">
       <thead>
           <tr>
-            <th></th>{{ range .Boroughs}}<th class="text-right">{{.Name}}</th>{{end}}<th class="text-right">Total</th>
+            <th></th>{{ range .Boroughs}}<th class="text-right">{{.Name}}</th>{{end}}
           </tr>
       </thead>
       <tbody>
         {{$os := .OnStreet}}
-        <tr><th>On-Street Parking</th>{{ range $i, $borough := .Boroughs}}<td class="spaces">{{($os.Filter $borough).EstimateSpaces | commify}}</td>{{end}}<td class="spaces">{{.OnStreet.EstimateSpaces | commify}}</td></tr>
+        {{$total := .BoroughCounter}}
+        <tr><th>On-Street Parking</th>{{ range $i, $borough := .Boroughs}}<td class="spaces">{{ $spaces := ($os.Filter $borough).EstimateSpaces }}{{$total.Add $borough $spaces}}{{$spaces | commify}}</td>{{end}}</tr>
         {{$dca := .DCA}}
-        <tr><th>Licensed Garage / Lot</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{($dca.Filter $borough).Spaces | commify}}</td>{{end}}<td class="spaces">{{$dca.Spaces | commify}}</td></tr>
+        <tr><th>Licensed Garage / Lot</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{$spaces := ($dca.Filter $borough).Spaces}}{{$total.Add $borough $spaces}}{{$spaces | commify}}</td>{{end}}</tr>
         {{$mun := .MunicipalGarages}}
-        <tr><th>Municipal Parking</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{($mun.Filter $borough).Spaces | commify}}</td>{{end}}<td class="spaces">{{$mun.Spaces | commify}}</td></tr>
+        <tr><th>Municipal Parking</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{$spaces := ($mun.Filter $borough).Spaces}}{{$total.Add $borough $spaces}}{{$spaces | commify}}</td>{{end}}</tr>
         {{$pg := .PrivateGarages}}
-        <tr><th>Private Detached Garage</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{($pg.Filter $borough).EstimateSpaces | commify}}</td>{{end}}<td class="spaces">{{$pg.EstimateSpaces | commify}}</td></tr>
+        <tr><th>Private Detached Garage</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{$spaces := ($pg.Filter $borough).EstimateSpaces}}{{$total.Add $borough $spaces}}{{$spaces | commify}}</td>{{end}}</tr>
         {{$pl := .ParkingLot}}
-        <tr><th>Parking Lot</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{($pl.Filter $borough).EstimateSpaces (($dca.Filter $borough).EstimateLotSpaces) | commify}}</td>{{end}}<td class="spaces">{{$pl.EstimateSpaces $dca.EstimateLotSpaces | commify}}</td></tr>
+        <tr><th>Parking Lot</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{$spaces := ($pl.Filter $borough).EstimateSpaces (($dca.Filter $borough).EstimateLotSpaces)}}{{$total.Add $borough $spaces}}{{$spaces | commify}}</td>{{end}}</tr>
         {{$dw := .Driveways}}
-        <tr><th>Driveways</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{($dw.Filter $borough).GuessSpaces | commify}}</td>{{end}}<td class="spaces">{{$dw.GuessSpaces | commify}}</td></tr>
+        <tr><th>Driveways</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{$spaces := ($dw.Filter $borough).GuessSpaces}}{{$total.Add $borough $spaces}}{{$spaces | commify}}</td>{{end}}</tr>
       </tbody>
+      <tfoot>
+        <tr><th>Total:</th>{{range $i, $borough := .Boroughs}}<td class="spaces">{{$total.Filter $borough | commify}}</td>{{end}}</tr>
+      </tfoot>
     </table>
     </div>
     </div>

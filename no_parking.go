@@ -23,6 +23,7 @@ type Data struct {
 	Driveways        data.Driveways
 	Boroughs         []*data.Borough
 	Updated          time.Time
+	BoroughCounter   Counter
 }
 
 func (d Data) RecentChanges() data.Changes {
@@ -48,6 +49,16 @@ func (d Data) ParkingSpaces() int {
 	spaces += d.MunicipalGarages.Spaces()
 	spaces += d.Driveways.GuessSpaces
 	return spaces
+}
+
+type Counter map[string]int
+
+func (c Counter) Add(b data.Borough, n int) string {
+	c[b.Name] += n
+	return ""
+}
+func (c Counter) Filter(b data.Borough) int {
+	return c[b.Name]
 }
 
 func tokenString(s string) []string {
@@ -133,6 +144,7 @@ func main() {
 		Driveways:        data.DrivewayGuess,
 		Updated:          time.Now().In(est),
 		Boroughs:         data.Boroughs,
+		BoroughCounter:   make(Counter),
 	})
 	if err != nil {
 		log.Fatal(err)

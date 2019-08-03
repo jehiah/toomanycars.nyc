@@ -238,8 +238,17 @@ h2 {
 .recent-changes > tbody > tr > td.src {
 	font-size:70%;
 }
-.byborough > tbody > tr > td.spaces {
+.byborough > tbody > tr > td.spaces, .byborough > tfoot > tr > td.spaces {
 	text-align:right;
+}
+.byborough > tfoot > tr > td.spaces {
+	font-weight:600;
+}
+.byborough > thead > tr> th, .byborough > thead > tr> td {
+	border-top:0;
+}
+.table.byborough {
+	margin-bottom:0;
 }
 .card {
 	color:#212529;
