@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Licensed Garage / Lot Changes {{.Date.Format "Jan 2006"}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+    <link type="text/plain" rel="author" href="/humans.txt" />
+</head>
+<body>
+
+
+<div class="container">
+<div class="row">
+  <div class="col-sm-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3 text-center">
+    
+<h1>Licensed Garage / Lot Changes {{.Date.Format "Jan 2006"}}</h1>
+
+<p>The table below includes NYC Departement of Consumer Affairs licenses that were issued or expired in {{.Date.Format "Jan 2006"}}. New or expiring licenses that are re-issued under a different company name are excluded from the results regardless of the timeframe between expiry and re-issuance.</p>
+
+<p>For more information see <a href="/">https://toomanycars.nyc/</a></p>
+</div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+<table class="table table-sm table-dark recent-changes" id="recent-changes" >
+<thead>
+<tr>
+  <th>Date</th>
+  <th>Spaces</th>
+  <th>Change</th>
+  <th>Borough</th>
+  <th>Source</th>
+</tr>
+</thead>
+<tbody>
+{{range $i, $e := .Changes}}
+<tr>
+  <td class="date">{{ if $e.Future }}<i>Planned</i><br /><small>({{$e.EffectiveDate.Format "Jan 2006"}})</small>{{else}}{{$e.EffectiveDate.Format "Jan 02 2006"}}{{ end}}</td>
+  <td class="spaces"><strong class="{{if gt $e.Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt $e.Spaces 0}}+{{end}}{{$e.Spaces}}</strong></td>
+  <td class="desc">{{if $e.ReferenceURL}}<a href="{{$e.ReferenceURL}}">{{$e.Name}}</a>{{else}}{{$e.Name}}{{end}}{{if $e.Description}}<br/>{{$e.Description}}{{end}}</td>
+  <td class="borough">{{$e.Borough}}</td>
+  <td class="src">{{$e.Source}}</td>
+</tr>
+{{end}}
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+<p class="text-center"> Last updated {{.Updated.Format "Jan 02 2006"}}.</p>
+</div>
+</div>
+
+</div>
+</body>
+</html>

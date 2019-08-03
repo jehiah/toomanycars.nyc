@@ -137,9 +137,9 @@
   <tr>
     <th>{{.Format "Jan 2006"}}</th>
     <th>Licensed Garage / Lot</th>
-    {{$changes := $dcabymonth.ChangesInMonth .}}
-    <td class="spaces">{{if gt $changes.Added 0}}+{{end}}{{$changes.Added | commify}}</td>
-    <td class="spaces">{{$changes.Removed | commify}}</td>
+    {{$changes := $dcabymonth.DiffInMonth .}}
+    <td class="spaces"><a href="dca_{{.Format "200601"}}.html">{{if gt $changes.Added 0}}+{{end}}{{$changes.Added | commify}}</a></td>
+    <td class="spaces"><a href="dca_{{.Format "200601"}}.html">{{$changes.Removed | commify}}</a></td>
   </tr>
   {{end}}
 </tbody>
@@ -148,40 +148,7 @@
     </div>
   </div>
 </div>
-  
-<div class="row">
-  <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
-<table class="table table-sm table-dark recent-changes" id="recent-changes" />
-<thead>
-<tr>
-  <th>Date</th>
-  <th>Spaces</th>
-  <th>Category</th>
-  <th>Change</th>
-  <th>Borough</th>
-  <th>Source</th>
-</tr>
-</thead>
-<tbody>
-{{range $i, $e := .RecentChanges}}
-<tr {{if gt $i 10}}class="hide-row"{{end}}>
-  <td class="date">{{ if $e.Future }}<i>Planned</i><br/><small>({{$e.EffectiveDate.Format "Jan 2006"}})</small>{{else}}{{$e.EffectiveDate.Format "Jan 02 2006"}}{{ end}}</td>
-  <td class="spaces"><strong class="{{if gt $e.Spaces 0}}more-parking{{else}}less-parking{{end}}">{{if gt $e.Spaces 0}}+{{end}}{{$e.Spaces}}</strong></td>
-  <td class="category">{{$e.Category}}</td>
-  <td class="desc">{{if $e.ReferenceURL}}<a href="{{$e.ReferenceURL}}">{{$e.Name}}</a>{{else}}{{$e.Name}}{{end}}{{if $e.Description}}<br/>{{$e.Description}}{{end}}</td>
-  <td class="borough">{{$e.Borough}}</td>
-  <td class="src">{{$e.Source}}</td>
-</tr>
-{{end}}
-</tbody>
-{{if gt (len .RecentChanges) 10}}
-<tfoot id="tfoot">
-  <tr><th colspan="6" class="text-center"><a href="#" id="showmore">Show More Recent Parking Changes</a></th></tr>
-</tfoot>
-{{end}}
-</table>
-</div>
-</div>
+
 
 <div class="row">
   <div class="col-sm-12">

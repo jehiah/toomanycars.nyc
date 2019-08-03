@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -30,11 +31,11 @@ func (d DCALicense) addressKey() string {
 	return fmt.Sprintf("%s %s %s", d.AddressBuilding, d.AddressStreetName, d.Borough)
 }
 
-func (d DCALicense) Change() Change {
+func (d DCALicense) Change(start bool) Change {
 	src := fmt.Sprintf("License %s", d.LicenseNumber)
 	dt := d.Creation
 	s := d.Spaces()
-	if d.LicenseStatus == "Inactive" {
+	if !start {
 		dt = d.Expiration
 		s = -1 * s
 		src = fmt.Sprintf("Expired License %s (%s)", d.LicenseNumber, d.Creation.Format("2006"))
@@ -206,7 +207,32 @@ type GroupChange struct {
 	Added, Removed int
 }
 
-func (g GroupedDCALicenses) ChangesInMonth(t time.Time) GroupChange {
+func (g GroupedDCALicenses) ChangesInMonth(t time.Time) []Change {
+	y, m, _ := t.Date()
+	var o []Change
+	for _, gg := range g {
+		min, max := gg.MinMax()
+		if min.Year() == y && min.Month() == m {
+			o = append(o, gg[0].Change(true))
+			continue
+		}
+		if max.Year() == y && max.Month() == m {
+			o = append(o, gg[len(gg)-1].Change(false))
+		}
+	}
+
+	sort.Slice(o, func(i, j int) bool {
+		if o[i].EffectiveDate.Equal(o[j].EffectiveDate) {
+			return strings.Compare(o[i].Name, o[j].Name) == -1
+		}
+		return o[i].EffectiveDate.After(o[j].EffectiveDate)
+
+	})
+
+	return o
+}
+
+func (g GroupedDCALicenses) DiffInMonth(t time.Time) GroupChange {
 	y, m, _ := t.Date()
 	var o GroupChange
 	for _, gg := range g {
@@ -234,65 +260,65 @@ func (d DCALicenses) MinMax() (min, max time.Time) {
 	return
 }
 
-func (d DCALicenses) RecentChanges() Changes {
-	// build skip list
-	skip := make(map[string]bool)
-	for _, e := range replacedLicenses {
-		skip[e.ReplacesLicense] = true
-	}
-
-	// build a list of most recent address start / end
-	recentExpired := make(map[string]DCALicense)
-	recentNew := make(map[string]DCALicense)
-	for _, dd := range d {
-		addr := dd.addressKey()
-		switch dd.LicenseStatus {
-		case "Active":
-			if c, ok := recentNew[addr]; !ok || c.Creation.Before(dd.Creation) {
-				recentNew[addr] = dd
-			}
-		case "Inactive":
-			if c, ok := recentExpired[addr]; !ok || c.Expiration.Before(dd.Expiration) {
-				recentExpired[addr] = dd
-			}
-		}
-	}
-
-	var o Changes
-	// 3 months
-	cutoff := time.Now().AddDate(0, -3, 0)
-	for _, dd := range d {
-		if skip[dd.LicenseNumber] {
-			continue
-		}
-		switch dd.LicenseStatus {
-		case "Inactive":
-			if dd.Expiration.After(time.Now()) {
-				// consider it as still activ
-				continue
-			}
-			if dd.Expiration.Before(cutoff) {
-				continue
-			}
-			// expired w/ a more recent expired is skipped
-			if e, ok := recentExpired[dd.addressKey()]; ok && dd.Expiration.Before(e.Expiration) {
-				continue
-			}
-			// "expired" w/ a later start at that address is skipped
-			if _, ok := recentNew[dd.addressKey()]; !ok {
-				o = append(o, dd.Change())
-			}
-		case "Active":
-			if dd.Creation.Before(cutoff) {
-				continue
-			}
-			// "new" w/ a previous entry at that address isn't an increase (unless space count changes)
-			if _, ok := recentExpired[dd.addressKey()]; ok {
-				// TODO: if e.Space() != dd.Space()
-			} else {
-				o = append(o, dd.Change())
-			}
-		}
-	}
-	return o
-}
+// func (d DCALicenses) RecentChanges() Changes {
+// 	// build skip list
+// 	skip := make(map[string]bool)
+// 	for _, e := range replacedLicenses {
+// 		skip[e.ReplacesLicense] = true
+// 	}
+//
+// 	// build a list of most recent address start / end
+// 	recentExpired := make(map[string]DCALicense)
+// 	recentNew := make(map[string]DCALicense)
+// 	for _, dd := range d {
+// 		addr := dd.addressKey()
+// 		switch dd.LicenseStatus {
+// 		case "Active":
+// 			if c, ok := recentNew[addr]; !ok || c.Creation.Before(dd.Creation) {
+// 				recentNew[addr] = dd
+// 			}
+// 		case "Inactive":
+// 			if c, ok := recentExpired[addr]; !ok || c.Expiration.Before(dd.Expiration) {
+// 				recentExpired[addr] = dd
+// 			}
+// 		}
+// 	}
+//
+// 	var o Changes
+// 	// 3 months
+// 	cutoff := time.Now().AddDate(0, -3, 0)
+// 	for _, dd := range d {
+// 		if skip[dd.LicenseNumber] {
+// 			continue
+// 		}
+// 		switch dd.LicenseStatus {
+// 		case "Inactive":
+// 			if dd.Expiration.After(time.Now()) {
+// 				// consider it as still activ
+// 				continue
+// 			}
+// 			if dd.Expiration.Before(cutoff) {
+// 				continue
+// 			}
+// 			// expired w/ a more recent expired is skipped
+// 			if e, ok := recentExpired[dd.addressKey()]; ok && dd.Expiration.Before(e.Expiration) {
+// 				continue
+// 			}
+// 			// "expired" w/ a later start at that address is skipped
+// 			if _, ok := recentNew[dd.addressKey()]; !ok {
+// 				o = append(o, dd.Change())
+// 			}
+// 		case "Active":
+// 			if dd.Creation.Before(cutoff) {
+// 				continue
+// 			}
+// 			// "new" w/ a previous entry at that address isn't an increase (unless space count changes)
+// 			if _, ok := recentExpired[dd.addressKey()]; ok {
+// 				// TODO: if e.Space() != dd.Space()
+// 			} else {
+// 				o = append(o, dd.Change())
+// 			}
+// 		}
+// 	}
+// 	return o
+// }

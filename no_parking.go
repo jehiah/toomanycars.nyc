@@ -6,8 +6,6 @@ import (
 	"html/template"
 	"log"
 	"os"
-	"sort"
-	"strings"
 	"time"
 
 	"github.com/jehiah/toomanycars.nyc/data"
@@ -27,20 +25,21 @@ type Data struct {
 	Timeframes       []time.Time
 }
 
-func (d Data) RecentChanges() data.Changes {
-	var o data.Changes
-	o = d.OnStreet.Changes
-	o = append(o, d.DCA.RecentChanges()...)
-	sort.Slice(o, func(i, j int) bool {
-		if o[i].EffectiveDate.Equal(o[j].EffectiveDate) {
-			return strings.Compare(o[i].Name, o[j].Name) == -1
-		}
-		return o[i].EffectiveDate.After(o[j].EffectiveDate)
+// func (d Data) RecentChanges() data.Changes {
+// 	var o data.Changes
+// 	o = d.OnStreet.Changes
+// 	o = append(o, d.DCA.RecentChanges()...)
+// 	sort.Slice(o, func(i, j int) bool {
+// 		if o[i].EffectiveDate.Equal(o[j].EffectiveDate) {
+// 			return strings.Compare(o[i].Name, o[j].Name) == -1
+// 		}
+// 		return o[i].EffectiveDate.After(o[j].EffectiveDate)
+//
+// 	})
+//
+// 	return o
+// }
 
-	})
-
-	return o
-}
 func RecentTimeframes() []time.Time {
 	var o []time.Time
 	y, m, _ := time.Now().Date()
@@ -108,7 +107,7 @@ func main() {
 		},
 	}
 
-	t, err := template.New("index.html").Funcs(funcMap).ParseFiles("templates/index.html")
+	t, err := template.New("index.html").Funcs(funcMap).ParseFiles("templates/index.html", "templates/dca_changes.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -139,13 +138,37 @@ func main() {
 	log.Printf("DoITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", len(doittPrivateGarages), doittPrivateGarages.SurfaceArea(), doittPrivateGarages.EstimateSpaces())
 	log.Printf("%d Municipal Grages with %d spaces", len(data.AllMunicipalGarages), data.AllMunicipalGarages.Spaces())
 
+	est, _ := time.LoadLocation("America/New_York")
+
+	g := dca.Group()
+	for _, d := range RecentTimeframes() {
+		filename := fmt.Sprintf("www/dca_%s.html", d.Format("200601"))
+		log.Printf("rendering %s", filename)
+		w, err := os.Create(filename)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = t.ExecuteTemplate(w, "dca_changes.html", struct {
+			Changes []data.Change
+			Date    time.Time
+			Updated time.Time
+		}{
+			Changes: g.ChangesInMonth(d),
+			Date:    d,
+			Updated: time.Now().In(est),
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Close()
+	}
+
+	log.Print("rendering www/index.html")
 	w, err := os.Create("www/index.html")
 	defer w.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	est, _ := time.LoadLocation("America/New_York")
-	log.Print("rendering www/index.html")
 	err = t.ExecuteTemplate(w, "index.html", Data{
 		OnStreet:         curbParking,
 		DCA:              dca,
@@ -161,4 +184,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
