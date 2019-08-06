@@ -223,7 +223,11 @@ func (g GroupedDCALicenses) ChangesInMonth(t time.Time) []Change {
 
 	sort.Slice(o, func(i, j int) bool {
 		if o[i].EffectiveDate.Equal(o[j].EffectiveDate) {
-			return strings.Compare(o[i].Name, o[j].Name) == -1
+			eq := strings.Compare(o[i].Name, o[j].Name)
+			if eq == 0 {
+				return strings.Compare(o[i].Description, o[j].Description) == -1
+			}
+			return eq == -1
 		}
 		return o[i].EffectiveDate.After(o[j].EffectiveDate)
 
