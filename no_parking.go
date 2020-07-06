@@ -136,7 +136,7 @@ func main() {
 	log.Printf("DCA managed spaces %d", dca.Spaces())
 	log.Printf("DoITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", len(doittParkingLot), doittParkingLot.SurfaceArea(), doittParkingLot.EstimateSpaces(dca.EstimateLotSpaces()))
 	log.Printf("DoITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", len(doittPrivateGarages), doittPrivateGarages.SurfaceArea(), doittPrivateGarages.EstimateSpaces())
-	log.Printf("%d Municipal Grages with %d spaces", len(data.AllMunicipalGarages), data.AllMunicipalGarages.Spaces())
+	log.Printf("%d Municipal Garages with %d spaces", len(data.AllMunicipalGarages), data.AllMunicipalGarages.Spaces())
 
 	est, _ := time.LoadLocation("America/New_York")
 
