@@ -40,6 +40,7 @@ type Data struct {
 // 	return o
 // }
 
+// RecentTimeframes returns the 1st of the month for the past 12 months
 func RecentTimeframes() []time.Time {
 	var o []time.Time
 	y, m, _ := time.Now().Date()

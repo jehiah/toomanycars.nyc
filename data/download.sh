@@ -13,7 +13,7 @@ FIELDS=license_nbr,license_status,license_creation_date,lic_expir_dd,industry,bu
 WHERE="industry='Garage%20and%20Parking%20Lot'%20OR%20industry='Parking%20Lot'%20OR%20industry='Garage'"
 
 echo "downloading dca_licenses.json"
-curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$where=${WHERE}&\$select=${FIELDS}&\$order=license_nbr%20ASC&\$limit=5000" --silent  > dca_licenses_tmp.json
+curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$where=${WHERE}&\$select=${FIELDS}&\$order=license_nbr%20ASC&\$limit=9000" --silent  > dca_licenses_tmp.json
 
 # reformat to one line per record
 echo -n "[" > dca_licenses.json
