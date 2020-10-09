@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/gsutil'
+  id: 'Copy to Google Storage'
+  entrypoint: gsutil
+  args: ['rsync', '-r', 'www/', 'gs://toomanycars-nyc/']
