@@ -48,8 +48,10 @@ fi
 
 # https://data.cityofnewyork.us/Housing-Development/Building-Footprints/nqwf-w8eh
 # https://dev.socrata.com/foundry/data.cityofnewyork.us/6kx9-25sv
+# https://data.cityofnewyork.us/api/geospatial/u486-qi8y?method=export&format=GeoJSON
+# https://data.cityofnewyork.us/api/geospatial/nqwf-w8eh?method=export&format=GeoJSON
 DATASET=nqwf-w8eh
-DATASET=xra2-rhxp
+DATASET=u486-qi8y
 FIELDS="doitt_id,bin,feat_code,shape_area"
 WHERE="feat_code=5110"
 if [ ! -f DOITT_planimetrics_building_garages.json ]; then
