@@ -52,6 +52,7 @@ fi
 # https://data.cityofnewyork.us/api/geospatial/nqwf-w8eh?method=export&format=GeoJSON
 DATASET=nqwf-w8eh
 DATASET=u486-qi8y
+DATASET=uic8-njst
 FIELDS="doitt_id,bin,feat_code,shape_area"
 WHERE="feat_code=5110"
 if [ ! -f DOITT_planimetrics_building_garages.json ]; then
