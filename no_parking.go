@@ -134,10 +134,22 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("DOT OnStreet changes %d (Estimated %d spaces)", curbParking.DeltaSpaces(), curbParking.EstimateSpaces())
-	log.Printf("DCA managed spaces %d", dca.Spaces())
+	log.Printf("DCA managed spaces %d, businesses: %d", dca.Spaces(), len(dca.Active()))
 	log.Printf("DoITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", len(doittParkingLot), doittParkingLot.SurfaceArea(), doittParkingLot.EstimateSpaces(dca.EstimateLotSpaces()))
 	log.Printf("DoITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", len(doittPrivateGarages), doittPrivateGarages.SurfaceArea(), doittPrivateGarages.EstimateSpaces())
 	log.Printf("%d Municipal Garages with %d spaces", len(data.AllMunicipalGarages), data.AllMunicipalGarages.Spaces())
+
+	for _, b := range data.Boroughs {
+		log.Printf("\n")
+		d := dca.Filter(*b)
+		log.Printf("%s DCA managed spaces %d, businesses: %d", b.Name, d.Spaces(), len(d.Active()))
+		dp := doittParkingLot.Filter(*b)
+		log.Printf("%s DoITT planimetrics Parking Lots %d lots covering %.f sqft. Estimated %d spaces", b.Name, len(dp), dp.SurfaceArea(), dp.EstimateSpaces(dca.Filter(*b).EstimateLotSpaces()))
+		dpg := doittPrivateGarages.Filter(*b)
+		log.Printf("%s DoITT planimetrics Private Garages %d covering %.f sqft. Estimated %d spaces", b.Name, len(dpg), dpg.SurfaceArea(), dpg.EstimateSpaces())
+		mg := data.AllMunicipalGarages.Filter(*b)
+		log.Printf("%s %d Municipal Garages with %d spaces", b.Name, len(mg), mg.Spaces())
+	}
 
 	est, _ := time.LoadLocation("America/New_York")
 
