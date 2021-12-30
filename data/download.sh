@@ -53,15 +53,25 @@ fi
 DATASET=nqwf-w8eh
 DATASET=u486-qi8y
 DATASET=uic8-njst
+DATASET=abe4-mw83
+DATASET=qb5r-6dgf # 2021-12-29
 FIELDS="doitt_id,bin,feat_code,shape_area"
 WHERE="feat_code=5110"
 if [ ! -f DOITT_planimetrics_building_garages.json ]; then
 	echo "downloading DOITT_planimetrics_building_garages.json"
 	curl "https://data.cityofnewyork.us/resource/${DATASET}.json?\$where=${WHERE}&\$select=${FIELDS}&\$limit=500000" --silent  > DOITT_planimetrics_building_garages.json
+    if grep "dataset.missing" DOITT_planimetrics_building_garages.json; then
+        cat DOITT_planimetrics_building_garages.json
+        exit 1
+    fi
 fi
 if [ ! -f DOITT_planimetrics_building_garages.geojson ]; then
 	echo "downloading DOITT_planimetrics_building_garages.geojson"
 	curl "https://data.cityofnewyork.us/resource/${DATASET}.geojson?\$where=${WHERE}&\$select=${FIELDS},the_geom&\$limit=500000" --silent  > DOITT_planimetrics_building_garages.geojson
+    if grep "not-found" DOITT_planimetrics_building_garages.geojson; then
+        cat DOITT_planimetrics_building_garages.geojson
+        exit 1
+    fi
 fi
 
 # curl -v 'https://data.cityofnewyork.us/api/views/metadata/v1/h7zy-iq3d'
